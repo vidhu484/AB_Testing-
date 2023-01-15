@@ -52,11 +52,36 @@ treatment = data[data['user_id'] > len(data) // 2]
 # Calculate the pre-test conversion rate
 pre_test_conversion_rate = data["converted"].mean() #is used to calculate the pre-test conversion rate by taking the mean of the 'converted' column for the whole dataframe.
 
-
+""" 
 ### is used to perform an independent samples t-test to compare the means of the 'converted' column for the treatment and control groups. 
 # The t-value and p-value are stored in the variables t and p respectively.
-##
-##
+##t-test: A t-test is a statistical test that compares the means of two groups to determine if there is a significant difference between them. In this case, the independent samples t-test is used to compare the means of the 'converted' column for the treatment group and the control group. The t-test calculates a t-value, which measures the difference between the means of the two groups in terms of the number of standard deviations. The t-test also calculates a p-value, which represents the probability that the difference between the means is due to random chance. A small p-value (typically less than 0.05) suggests that the difference between the means is statistically significant and not due to random chance.
+
+#Effect size: Effect size is a measure of the magnitude of the difference between the means of the two groups. 
+# It is calculated as the t-value multiplied by the square root of the sample size. It is useful to measure the size of the effect of the treatment relative to the control group. 
+# A large effect size means that the treatment had a large impact on the outcome, while a small effect size means that the treatment had a small impact on the outcome.
+
+#Effect size is measured in standard deviation units like Cohen's d, Hedge's g, Glass's delta, etc. Here in the code, the effect size is calculated as t-value multiplied by the square root of the sample size. T
+# he effect size is a positive value, so it represents the difference between the means in standard deviation units.
+
+#A positive effect size means that the mean of the treatment group is larger than the mean of the control group, and a negative effect size means that 
+# the mean of the treatment group is smaller than the mean of the control group.
+
+#The interpretation of effect size depends on the context of the study, but in general, the larger the effect size, the more important the difference between the means.
+#t-test: A t-test is a statistical test that compares the means of two groups to determine if there is a significant difference between them. In this case, the independent samples t-test is used to compare the means of the 'converted' column for the treatment group and the control group. The t-test calculates a t-value, which measures the difference between the means of the two groups in terms of the number of standard deviations. The t-test also calculates a p-value, which represents the probability that the difference between the means is due to random chance. A small p-value (typically less than 0.05) suggests that the difference between the means is statistically significant and not due to random chance.
+
+Effect size: Effect size is a measure of the magnitude of the difference between the means of the two groups. It is calculated as the t-value multiplied by the square root of the sample size. It is useful to measure the size of the effect of the treatment relative to the control group. A large effect size means that the treatment had a large impact on the outcome, while a small effect size means that the treatment had a small impact on the outcome.
+
+Effect size is measured in standard deviation units like Cohen's d, Hedge's g, Glass's delta, etc. Here in the code, the effect size is calculated as t-value multiplied by the square root of the sample size. The effect size is a positive value, so it represents the difference between the means in standard deviation units.
+
+A positive effect size means that the mean of the treatment group is larger than the mean of the control group, and a negative effect size means that the mean of the treatment group is smaller than the mean of the control group.
+
+The interpretation of effect size depends on the context of the study, but in general, the larger the effect size, the more important the difference between the means.
+#
+#
+#
+
+"""
 
 t, p = stats.ttest_ind(treatment["converted"], control["converted"])
 
