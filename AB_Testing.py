@@ -57,27 +57,6 @@ pre_test_conversion_rate = data["converted"].mean() #is used to calculate the pr
 # The t-value and p-value are stored in the variables t and p respectively.
 ##t-test: A t-test is a statistical test that compares the means of two groups to determine if there is a significant difference between them. In this case, the independent samples t-test is used to compare the means of the 'converted' column for the treatment group and the control group. The t-test calculates a t-value, which measures the difference between the means of the two groups in terms of the number of standard deviations. The t-test also calculates a p-value, which represents the probability that the difference between the means is due to random chance. A small p-value (typically less than 0.05) suggests that the difference between the means is statistically significant and not due to random chance.
 
-#Effect size: Effect size is a measure of the magnitude of the difference between the means of the two groups. 
-# It is calculated as the t-value multiplied by the square root of the sample size. It is useful to measure the size of the effect of the treatment relative to the control group. 
-# A large effect size means that the treatment had a large impact on the outcome, while a small effect size means that the treatment had a small impact on the outcome.
-
-#Effect size is measured in standard deviation units like Cohen's d, Hedge's g, Glass's delta, etc. Here in the code, the effect size is calculated as t-value multiplied by the square root of the sample size. T
-# he effect size is a positive value, so it represents the difference between the means in standard deviation units.
-
-#A positive effect size means that the mean of the treatment group is larger than the mean of the control group, and a negative effect size means that 
-# the mean of the treatment group is smaller than the mean of the control group.
-
-#The interpretation of effect size depends on the context of the study, but in general, the larger the effect size, the more important the difference between the means.
-#t-test: A t-test is a statistical test that compares the means of two groups to determine if there is a significant difference between them. In this case, the independent samples t-test is used to compare the means of the 'converted' column for the treatment group and the control group. The t-test calculates a t-value, which measures the difference between the means of the two groups in terms of the number of standard deviations. The t-test also calculates a p-value, which represents the probability that the difference between the means is due to random chance. A small p-value (typically less than 0.05) suggests that the difference between the means is statistically significant and not due to random chance.
-
-Effect size: Effect size is a measure of the magnitude of the difference between the means of the two groups. It is calculated as the t-value multiplied by the square root of the sample size. It is useful to measure the size of the effect of the treatment relative to the control group. A large effect size means that the treatment had a large impact on the outcome, while a small effect size means that the treatment had a small impact on the outcome.
-
-Effect size is measured in standard deviation units like Cohen's d, Hedge's g, Glass's delta, etc. Here in the code, the effect size is calculated as t-value multiplied by the square root of the sample size. The effect size is a positive value, so it represents the difference between the means in standard deviation units.
-
-A positive effect size means that the mean of the treatment group is larger than the mean of the control group, and a negative effect size means that the mean of the treatment group is smaller than the mean of the control group.
-
-The interpretation of effect size depends on the context of the study, but in general, the larger the effect size, the more important the difference between the means.
-#
 #
 #
 
@@ -124,6 +103,20 @@ The output suggests that the new design is not effective. The p-value is greater
 The effect size, which is calculated as the t-value multiplied by the square root of the sample size, is negative and large in absolute value, this indicates that the difference in means between the two groups is large.
 
 The 95% Confidence Interval also indicates that the true difference in means is negative and is likely to be between -0.426 and -0.420, which further confirms that the new design is not effective.
+
+case, the effect size is -85.16505002535685, which is a large negative value. This means that the mean of the 'converted' column for the treatment group is much smaller than the mean of the 'converted' column for the control group.
+A negative effect size means that the new design has a negative impact on the conversion rate, which means that the new design is not effective in increasing the number of people who click through and join the site.
+
+To understand the magnitude of the effect size, it's helpful to compare it to the guidelines provided by Cohen (1988) that I mentioned in my previous response:
+
+Effect sizes of 0.2 are considered small,
+Effect sizes of 0.5 are considered medium,
+Effect sizes of 0.8 or greater are considered large.
+An effect size of -85.16505002535685 is well beyond the range of a large effect size. This means that the difference in means between the treatment and control groups is very large and the new design has a huge negative impact on the conversion rate.
+
+It's important to keep in mind that effect size is just one aspect to consider when interpreting the results of a study. Other factors such as sample size, power, and statistical significance also play a role in interpreting the results.
+
+In this case, the t-test also indicates that the difference in means is statistically significant with a p-value less than 0.05, which supports the conclusion that the new design is not effective in increasing the number of people who click through and join the site.
 
 It's important to consider these results in the context of the website's goals and the broader business context. 
 Other factors such as user feedback and the cost of implementing the new design should also be taken into account before making a decision about whether to implement the new design or not.
