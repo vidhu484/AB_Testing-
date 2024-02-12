@@ -1,0 +1,491 @@
+
+  372 missing Modules                
+  ------------------                 
+? AppKit                              imported from pandas.io.clipboard
+? ConfigParser                        imported from sqlalchemy.util.compat
+? Foundation                          imported from pandas.io.clipboard
+? IPython                             imported from pandas.io.formats.printing
+? IPython.core.formatters             imported from pandas.io.formats.printing
+? Numeric                             imported from numpy.distutils.system_info
+? PIL                                 imported from openpyxl.drawing.image
+? PyQt4                               imported from pandas.io.clipboard
+? PyQt4.QtGui                         imported from pandas.io.clipboard
+? PyQt5                               imported from pandas.io.clipboard
+? PyQt5.QtWidgets                     imported from pandas.io.clipboard
+? StringIO                            imported from six, sqlalchemy.util.compat
+? UserDict                            imported from pytz.lazy
+? __main__                            imported from bdb, pandas.io.formats.console, pdb, pkg_resources
+? _dummy_thread                       imported from numpy.core.arrayprint
+? _frozen_importlib                   imported from importlib, importlib.abc, zipimport
+? _frozen_importlib_external          imported from importlib, importlib._bootstrap, importlib.abc, zipimport
+? _manylinux                          imported from packaging._manylinux, pkg_resources._vendor.packaging._manylinux, setuptools._vendor.packaging._manylinux
+? _posixshmem                         imported from multiprocessing.resource_tracker, multiprocessing.shared_memory
+? _ufunc                              imported from numpy._typing
+? _utils.set_module                   imported from numpy._globals, numpy._typing, numpy.core._exceptions, numpy.core._machar, numpy.core._ufunc_config, numpy.core.defchararray, numpy.core.fromnumeric, numpy.core.getlimits, numpy.core.memmap, numpy.core.numerictypes, numpy.core.overrides, numpy.core.records, numpy.lib._datasource, numpy.lib.function_base, numpy.lib.index_tricks, numpy.lib.polynomial, numpy.lib.type_check, numpy.lib.utils, numpy.linalg.linalg, numpy.matrixlib.defmatrix
+? _winreg                             imported from platform
+? asyncio.DefaultEventLoopPolicy      imported from -
+? botocore.exceptions                 imported from pandas.io.common
+? bs4                                 imported from pandas.io.html
+? cPickle                             imported from sqlalchemy.util.compat
+? cStringIO                           imported from sqlalchemy.util.compat, xlrd.timemachine
+? code_generators.genapi              imported from numpy.core.cversions
+? code_generators.numpy_api           imported from numpy.core.cversions
+? collections.Mapping                 imported from pytz.lazy
+? core.abs                            imported from numpy
+? dateutil.tz.tzfile                  imported from dateutil.zoneinfo
+? defusedxml                          imported from openpyxl.xml
+? defusedxml.ElementTree              imported from openpyxl.xml.functions
+? dialects.plugins                    imported from sqlalchemy.engine.url
+? dialects.registry                   imported from sqlalchemy.engine.url
+? dummy.Process                       imported from multiprocessing.pool
+? dummy_threading                     imported from sqlalchemy.util.compat
+? engine.Connection                   imported from sqlalchemy.future, sqlalchemy.future.engine
+? engine.Engine                       imported from sqlalchemy.future, sqlalchemy.future.engine
+? engine.create_engine                imported from sqlalchemy, sqlalchemy.future, sqlalchemy.future.engine
+? engine.create_mock_engine           imported from sqlalchemy
+? engine.engine_from_config           imported from sqlalchemy
+? extern.jaraco.functools             imported from setuptools._entry_points
+? extern.jaraco.text                  imported from setuptools._entry_points, setuptools.command._requirestxt, setuptools.command.easy_install
+? extern.more_itertools               imported from setuptools._entry_points, setuptools.dist
+? extern.ordered_set                  imported from setuptools.dist
+? extern.packaging                    imported from setuptools._normalization
+? extern.packaging.markers            imported from setuptools._core_metadata, setuptools.config.setupcfg, setuptools.dist
+? extern.packaging.requirements       imported from setuptools._core_metadata, setuptools.command._requirestxt, setuptools.config.setupcfg
+? extern.packaging.specifiers         imported from setuptools.config.setupcfg, setuptools.dist
+? extern.packaging.version            imported from setuptools._core_metadata, setuptools.config.setupcfg, setuptools.depends, setuptools.dist
+? fsspec                              imported from pyarrow.fs
+? hypothesis                          imported from pandas.util._tester
+? importlib_metadata                  imported from setuptools._importlib, sqlalchemy.util.compat
+? java.lang                           imported from platform, xml.sax._exceptions
+? jnius                               imported from pkg_resources._vendor.platformdirs.android, platformdirs.android
+? lxml.etree                          imported from openpyxl.xml, openpyxl.xml.functions, pandas.io.formats.xml, pandas.io.html, pandas.io.xml
+? lxml.html                           imported from pandas.io.html
+? markupsafe                          imported from pandas.io.formats.style_render
+? matplotlib                          imported from pandas.io.formats.style
+? matplotlib.pyplot                   imported from pandas._testing._io, pandas._testing.asserters, pandas.io.formats.style
+? numarray                            imported from numpy.distutils.system_info
+? numba                               imported from pandas.core._numba.executor, pandas.core._numba.kernels.mean_, pandas.core._numba.kernels.min_max_, pandas.core._numba.kernels.shared, pandas.core._numba.kernels.sum_, pandas.core._numba.kernels.var_, pandas.core.groupby.numba_, pandas.core.util.numba_, pandas.core.window.numba_, pandas.core.window.online
+? numexpr                             imported from pandas.core.computation.engines, pandas.core.computation.expressions
+? numpy._distributor_init_local       imported from -
+? numpy.amax                          imported from numpy.ma.core
+? numpy.amin                          imported from numpy.ma.core
+? numpy.array                         imported from numpy.ma.core, numpy.ma.extras, numpy.ma.mrecords
+? numpy.asarray                       imported from numpy.ctypeslib
+? numpy.bool_                         imported from numpy._typing._array_like, numpy.ma.core, numpy.ma.mrecords
+? numpy.bytes_                        imported from numpy._typing._array_like
+? numpy.compat.asbytes                imported from numpy.core.defchararray, numpy.lib._iotools, numpy.lib.npyio
+? numpy.compat.asstr                  imported from numpy.lib.npyio
+? numpy.compat.asunicode              imported from numpy.lib._iotools, numpy.lib.npyio
+? numpy.compat.bytes                  imported from numpy.ma.core
+? numpy.compat.is_pathlib_path        imported from numpy.core.memmap
+? numpy.compat.isfileobj              imported from numpy.lib.format
+? numpy.compat.long                   imported from numpy.core.numerictypes, numpy.ma.core
+? numpy.compat.os_PathLike            imported from numpy.lib.npyio
+? numpy.compat.os_fspath              imported from numpy.core._methods, numpy.core.memmap, numpy.core.records, numpy.lib.format, numpy.lib.npyio
+? numpy.compat.pickle                 imported from numpy.core._methods, numpy.lib.format, numpy.lib.npyio
+? numpy.compat.unicode                imported from numpy.core._type_aliases, numpy.core.numerictypes, numpy.ma.core
+? numpy.complexfloating               imported from numpy._typing._array_like
+? numpy.core.Inf                      imported from numpy.linalg.linalg
+? numpy.core.absolute                 imported from numpy.lib.user_array
+? numpy.core.add                      imported from numpy.lib.user_array, numpy.linalg.linalg
+? numpy.core.all                      imported from numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.amax                     imported from numpy.linalg.linalg
+? numpy.core.amin                     imported from numpy.linalg.linalg
+? numpy.core.arange                   imported from numpy.fft.helper, numpy.lib.user_array, numpy.testing._private.utils
+? numpy.core.argsort                  imported from numpy.linalg.linalg
+? numpy.core.array                    imported from numpy.lib.polynomial, numpy.lib.user_array, numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.array2string             imported from numpy.testing._private.utils
+? numpy.core.array_repr               imported from numpy.testing._private.utils
+? numpy.core.asanyarray               imported from numpy.linalg.linalg
+? numpy.core.asarray                  imported from numpy.fft._pocketfft, numpy.fft.helper, numpy.lib.user_array, numpy.lib.utils, numpy.linalg.linalg
+? numpy.core.atleast_1d               imported from numpy.lib.polynomial
+? numpy.core.atleast_2d               imported from numpy.linalg.linalg
+? numpy.core.atleast_3d               imported from numpy.lib.shape_base
+? numpy.core.bitwise_and              imported from numpy.lib.user_array
+? numpy.core.bitwise_or               imported from numpy.lib.user_array
+? numpy.core.bitwise_xor              imported from numpy.lib.user_array
+? numpy.core.bool_                    imported from numpy.testing._private.utils
+? numpy.core.cdouble                  imported from numpy.linalg.linalg
+? numpy.core.complexfloating          imported from numpy.linalg.linalg
+? numpy.core.conjugate                imported from numpy.fft._pocketfft
+? numpy.core.count_nonzero            imported from numpy.linalg.linalg
+? numpy.core.csingle                  imported from numpy.linalg.linalg
+? numpy.core.divide                   imported from numpy.lib.user_array, numpy.linalg.linalg
+? numpy.core.dot                      imported from numpy.lib.polynomial, numpy.linalg.linalg
+? numpy.core.double                   imported from numpy.linalg.linalg
+? numpy.core.dtype                    imported from numpy.core._add_newdocs_scalars
+? numpy.core.empty                    imported from numpy.fft.helper, numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.empty_like               imported from numpy.linalg.linalg
+? numpy.core.equal                    imported from numpy.lib.user_array
+? numpy.core.errstate                 imported from numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.finfo                    imported from numpy.lib.polynomial, numpy.linalg.linalg
+? numpy.core.float32                  imported from numpy.testing._private.utils
+? numpy.core.float_                   imported from numpy.testing._private.utils
+? numpy.core.geterrobj                imported from numpy.linalg.linalg
+? numpy.core.greater                  imported from numpy.lib.user_array
+? numpy.core.greater_equal            imported from numpy.lib.user_array
+? numpy.core.hstack                   imported from numpy.lib.polynomial
+? numpy.core.iinfo                    imported from numpy.lib.twodim_base
+? numpy.core.inexact                  imported from numpy.linalg.linalg
+? numpy.core.inf                      imported from numpy.testing._private.utils
+? numpy.core.intc                     imported from numpy.linalg.linalg
+? numpy.core.integer                  imported from numpy.fft.helper
+? numpy.core.intp                     imported from numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.invert                   imported from numpy.lib.user_array
+? numpy.core.isfinite                 imported from numpy.linalg.linalg
+? numpy.core.isnan                    imported from numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.isnat                    imported from numpy.testing._private.utils
+? numpy.core.isscalar                 imported from numpy.lib.polynomial, numpy.testing._private.utils
+? numpy.core.left_shift               imported from numpy.lib.user_array
+? numpy.core.less                     imported from numpy.lib.user_array
+? numpy.core.less_equal               imported from numpy.lib.user_array
+? numpy.core.linspace                 imported from numpy.lib.index_tricks
+? numpy.core.matmul                   imported from numpy.linalg.linalg
+? numpy.core.max                      imported from numpy.testing._private.utils
+? numpy.core.moveaxis                 imported from numpy.linalg.linalg
+? numpy.core.multiply                 imported from numpy.lib.user_array, numpy.linalg.linalg
+? numpy.core.ndarray                  imported from numpy.lib.utils, numpy.testing._private.utils
+? numpy.core.newaxis                  imported from numpy.linalg.linalg
+? numpy.core.not_equal                imported from numpy.lib.user_array
+? numpy.core.number                   imported from numpy.testing._private.utils
+? numpy.core.object_                  imported from numpy.linalg.linalg, numpy.testing._private.utils
+? numpy.core.ones                     imported from numpy.lib.polynomial
+? numpy.core.power                    imported from numpy.lib.user_array
+? numpy.core.prod                     imported from numpy.linalg.linalg
+? numpy.core.reciprocal               imported from numpy.linalg.linalg
+? numpy.core.remainder                imported from numpy.lib.user_array
+? numpy.core.reshape                  imported from numpy.lib.user_array
+? numpy.core.result_type              imported from numpy.testing._private.utils
+? numpy.core.right_shift              imported from numpy.lib.user_array
+? numpy.core.roll                     imported from numpy.fft.helper
+? numpy.core.shape                    imported from numpy.lib.user_array
+? numpy.core.sign                     imported from numpy.linalg.linalg
+? numpy.core.signbit                  imported from numpy.testing._private.utils
+? numpy.core.sin                      imported from numpy.lib.user_array
+? numpy.core.single                   imported from numpy.linalg.linalg
+? numpy.core.sort                     imported from numpy.linalg.linalg
+? numpy.core.sqrt                     imported from numpy.fft._pocketfft, numpy.lib.user_array, numpy.linalg.linalg
+? numpy.core.subtract                 imported from numpy.lib.user_array
+? numpy.core.sum                      imported from numpy.linalg.linalg
+? numpy.core.swapaxes                 imported from numpy.fft._pocketfft, numpy.linalg.linalg
+? numpy.core.take                     imported from numpy.fft._pocketfft
+? numpy.core.transpose                imported from numpy.lib.function_base, numpy.lib.user_array
+? numpy.core.ufunc                    imported from numpy.lib.utils
+? numpy.core.vstack                   imported from numpy.lib.shape_base
+? numpy.core.zeros                    imported from numpy.fft._pocketfft, numpy.linalg.linalg
+? numpy.datetime64                    imported from numpy._typing._array_like
+? numpy.dtype                         imported from numpy._typing._array_like, numpy.array_api._typing, numpy.ctypeslib, numpy.ma.mrecords
+? numpy.expand_dims                   imported from numpy.ma.core
+? numpy.eye                           imported from numpy.core.numeric
+? numpy.float32                       imported from numpy.array_api._typing
+? numpy.float64                       imported from numpy.array_api._typing
+? numpy.floating                      imported from numpy._typing._array_like
+? numpy.frombuffer                    imported from numpy.ctypeslib
+? numpy.generic                       imported from numpy._typing._array_like
+? numpy.histogramdd                   imported from numpy.lib.twodim_base
+? numpy.int16                         imported from numpy.array_api._typing
+? numpy.int32                         imported from numpy.array_api._typing
+? numpy.int64                         imported from numpy.array_api._typing
+? numpy.int8                          imported from numpy.array_api._typing
+? numpy.integer                       imported from numpy._typing._array_like, numpy.ctypeslib
+? numpy.intp                          imported from numpy.ctypeslib
+? numpy.iscomplexobj                  imported from numpy.ma.core
+? numpy.isfinite                      imported from numpy.testing._private.utils
+? numpy.isinf                         imported from numpy.testing._private.utils
+? numpy.isnan                         imported from numpy.testing._private.utils
+? numpy.lib.imag                      imported from numpy.testing._private.utils
+? numpy.lib.iscomplexobj              imported from numpy.testing._private.utils
+? numpy.lib.real                      imported from numpy.testing._private.utils
+? numpy.linalg.eigvals                imported from numpy.lib.polynomial
+? numpy.linalg.inv                    imported from numpy.lib.polynomial, numpy.matrixlib.defmatrix
+? numpy.linalg.lstsq                  imported from numpy.lib.polynomial
+? numpy.linalg.matrix_power           imported from numpy.matrixlib.defmatrix
+? numpy.linalg.pinv                   imported from numpy.matrixlib.defmatrix
+? numpy.ma.MAError                    imported from numpy.ma.mrecords
+? numpy.ma.MaskedArray                imported from numpy.lib.npyio, numpy.lib.recfunctions, numpy.ma.mrecords
+? numpy.ma.filled                     imported from numpy.ma.mrecords
+? numpy.ma.getdata                    imported from numpy.ma.mrecords
+? numpy.ma.getmaskarray               imported from numpy.ma.mrecords
+? numpy.ma.make_mask_descr            imported from numpy.lib.npyio
+? numpy.ma.masked                     imported from numpy.ma.mrecords
+? numpy.ma.masked_array               imported from numpy.ma.mrecords
+? numpy.ma.nomask                     imported from numpy.ma.mrecords
+? numpy.ndarray                       imported from numpy._typing._array_like, numpy.ctypeslib, numpy.lib.recfunctions, numpy.ma.core, numpy.ma.extras, numpy.ma.mrecords, pandas.compat.numpy.function
+? numpy.number                        imported from numpy._typing._array_like
+? numpy.object_                       imported from numpy._typing._array_like
+? numpy.recarray                      imported from numpy.lib.recfunctions, numpy.ma.mrecords
+? numpy.str_                          imported from numpy._typing._array_like
+? numpy.testing.IS_PYPY               imported from numpy._pytesttester
+? numpy.timedelta64                   imported from numpy._typing._array_like
+? numpy.ufunc                         imported from -, numpy.testing.overrides
+? numpy.uint16                        imported from numpy.array_api._typing
+? numpy.uint32                        imported from numpy.array_api._typing
+? numpy.uint64                        imported from numpy.array_api._typing
+? numpy.uint8                         imported from numpy.array_api._typing
+? numpy.unsignedinteger               imported from numpy._typing._array_like
+? numpy.void                          imported from numpy._typing._array_like
+? numpy_distutils                     imported from numpy.f2py.diagnose
+? numpy_distutils.command.build_flib  imported from numpy.f2py.diagnose
+? numpy_distutils.command.cpuinfo     imported from numpy.f2py.diagnose
+? numpy_distutils.cpuinfo             imported from numpy.f2py.diagnose
+? numpy_distutils.fcompiler           imported from numpy.f2py.diagnose
+? odf.config                          imported from pandas.io.excel._odswriter
+? odf.element                         imported from pandas.io.excel._odfreader
+? odf.namespaces                      imported from pandas.io.excel._odfreader
+? odf.opendocument                    imported from pandas.io.excel._odfreader, pandas.io.excel._odswriter
+? odf.style                           imported from pandas.io.excel._odswriter
+? odf.table                           imported from pandas.io.excel._odfreader, pandas.io.excel._odswriter
+? odf.text                            imported from pandas.io.excel._odfreader, pandas.io.excel._odswriter
+? openpyxl.descriptors.Alias          imported from openpyxl.cell.text, openpyxl.chart._3d, openpyxl.chart._chart, openpyxl.chart.area_chart, openpyxl.chart.axis, openpyxl.chart.bar_chart, openpyxl.chart.bubble_chart, openpyxl.chart.chartspace, openpyxl.chart.data_source, openpyxl.chart.error_bar, openpyxl.chart.label, openpyxl.chart.layout, openpyxl.chart.legend, openpyxl.chart.line_chart, openpyxl.chart.marker, openpyxl.chart.pie_chart, openpyxl.chart.pivot, openpyxl.chart.plotarea, openpyxl.chart.print_settings, openpyxl.chart.radar_chart, openpyxl.chart.scatter_chart, openpyxl.chart.series, openpyxl.chart.shapes, openpyxl.chart.stock_chart, openpyxl.chart.surface_chart, openpyxl.chart.text, openpyxl.chart.title, openpyxl.chart.trendline, openpyxl.chartsheet.chartsheet, openpyxl.chartsheet.relation, openpyxl.comments.author, openpyxl.drawing.colors, openpyxl.drawing.connector, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.graphic, openpyxl.drawing.line, openpyxl.drawing.picture, openpyxl.drawing.properties, openpyxl.drawing.spreadsheet_drawing, openpyxl.drawing.text, openpyxl.formatting.formatting, openpyxl.packaging.core, openpyxl.packaging.custom, openpyxl.packaging.relationship, openpyxl.packaging.workbook, openpyxl.styles.alignment, openpyxl.styles.borders, openpyxl.styles.differential, openpyxl.styles.fills, openpyxl.styles.fonts, openpyxl.workbook.defined_name, openpyxl.workbook.protection, openpyxl.worksheet.datavalidation, openpyxl.worksheet.dimensions, openpyxl.worksheet.filters, openpyxl.worksheet.header_footer, openpyxl.worksheet.protection, openpyxl.worksheet.table
+? openpyxl.descriptors.Bool           imported from openpyxl.cell.text, openpyxl.chart._chart, openpyxl.chart.area_chart, openpyxl.chart.axis, openpyxl.chart.bar_chart, openpyxl.chart.bubble_chart, openpyxl.chart.data_source, openpyxl.chart.pie_chart, openpyxl.chart.series, openpyxl.chart.surface_chart, openpyxl.chartsheet.custom, openpyxl.chartsheet.properties, openpyxl.chartsheet.protection, openpyxl.chartsheet.publish, openpyxl.chartsheet.views, openpyxl.comments.comment_sheet, openpyxl.drawing.connector, openpyxl.drawing.effect, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.graphic, openpyxl.drawing.picture, openpyxl.drawing.properties, openpyxl.drawing.spreadsheet_drawing, openpyxl.drawing.text, openpyxl.formatting.formatting, openpyxl.formatting.rule, openpyxl.packaging.custom, openpyxl.packaging.workbook, openpyxl.pivot.cache, openpyxl.pivot.fields, openpyxl.pivot.table, openpyxl.styles.alignment, openpyxl.styles.borders, openpyxl.styles.cell_style, openpyxl.styles.colors, openpyxl.styles.named_styles, openpyxl.styles.protection, openpyxl.styles.table, openpyxl.workbook.defined_name, openpyxl.workbook.external_link.external, openpyxl.workbook.properties, openpyxl.workbook.protection, openpyxl.workbook.smart_tags, openpyxl.workbook.views, openpyxl.workbook.web, openpyxl.worksheet.datavalidation, openpyxl.worksheet.dimensions, openpyxl.worksheet.filters, openpyxl.worksheet.header_footer, openpyxl.worksheet.page, openpyxl.worksheet.pagebreak, openpyxl.worksheet.properties, openpyxl.worksheet.protection, openpyxl.worksheet.scenario, openpyxl.worksheet.table, openpyxl.worksheet.views
+? openpyxl.descriptors.Convertible    imported from openpyxl.formatting.formatting, openpyxl.worksheet.datavalidation, openpyxl.worksheet.filters, openpyxl.worksheet.scenario
+? openpyxl.descriptors.DateTime       imported from openpyxl.packaging.core, openpyxl.packaging.custom, openpyxl.pivot.cache, openpyxl.pivot.fields, openpyxl.worksheet.filters
+? openpyxl.descriptors.Descriptor     imported from -, openpyxl.workbook.defined_name, openpyxl.worksheet.table
+? openpyxl.descriptors.Float          imported from openpyxl.chart.axis, openpyxl.chart.error_bar, openpyxl.chart.layout, openpyxl.chart.pie_chart, openpyxl.chart.print_settings, openpyxl.drawing.effect, openpyxl.drawing.geometry, openpyxl.formatting.rule, openpyxl.packaging.custom, openpyxl.pivot.cache, openpyxl.pivot.fields, openpyxl.styles.cell_style, openpyxl.styles.fills, openpyxl.styles.table, openpyxl.workbook.properties, openpyxl.workbook.protection, openpyxl.workbook.views, openpyxl.workbook.web, openpyxl.worksheet.dimensions, openpyxl.worksheet.filters, openpyxl.worksheet.page, openpyxl.worksheet.views
+? openpyxl.descriptors.Integer        imported from -, openpyxl.cell.text, openpyxl.chart._chart, openpyxl.chart.area_chart, openpyxl.chart.axis, openpyxl.chart.bar_chart, openpyxl.chart.bubble_chart, openpyxl.chart.data_source, openpyxl.chart.legend, openpyxl.chart.pie_chart, openpyxl.chart.series, openpyxl.chart.surface_chart, openpyxl.chartsheet.custom, openpyxl.chartsheet.protection, openpyxl.chartsheet.publish, openpyxl.chartsheet.relation, openpyxl.chartsheet.views, openpyxl.comments.comment_sheet, openpyxl.drawing.colors, openpyxl.drawing.connector, openpyxl.drawing.effect, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.line, openpyxl.drawing.properties, openpyxl.drawing.spreadsheet_drawing, openpyxl.drawing.text, openpyxl.formatting.rule, openpyxl.packaging.custom, openpyxl.packaging.workbook, openpyxl.pivot.cache, openpyxl.pivot.fields, openpyxl.pivot.record, openpyxl.pivot.table, openpyxl.styles.borders, openpyxl.styles.cell_style, openpyxl.styles.colors, openpyxl.styles.fills, openpyxl.styles.fonts, openpyxl.styles.named_styles, openpyxl.styles.numbers, openpyxl.styles.table, openpyxl.workbook.defined_name, openpyxl.workbook.external_link.external, openpyxl.workbook.function_group, openpyxl.workbook.properties, openpyxl.workbook.protection, openpyxl.workbook.views, openpyxl.workbook.web, openpyxl.worksheet.datavalidation, openpyxl.worksheet.dimensions, openpyxl.worksheet.filters, openpyxl.worksheet.header_footer, openpyxl.worksheet.merge, openpyxl.worksheet.page, openpyxl.worksheet.pagebreak, openpyxl.worksheet.print_settings, openpyxl.worksheet.protection, openpyxl.worksheet.scenario, openpyxl.worksheet.table, openpyxl.worksheet.views
+? openpyxl.descriptors.MatchPattern   imported from -, openpyxl.worksheet.header_footer
+? openpyxl.descriptors.Min            imported from openpyxl.styles.alignment
+? openpyxl.descriptors.MinMax         imported from -, openpyxl.chart._chart, openpyxl.chart.axis, openpyxl.chart.bubble_chart, openpyxl.chart.pie_chart, openpyxl.chart.reference, openpyxl.drawing.colors, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.line, openpyxl.drawing.text, openpyxl.styles.alignment, openpyxl.styles.colors, openpyxl.styles.fills, openpyxl.worksheet.cell_range, openpyxl.worksheet.filters
+? openpyxl.descriptors.NoneSet        imported from openpyxl.cell.text, openpyxl.chart.axis, openpyxl.chart.layout, openpyxl.chart.pie_chart, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.line, openpyxl.drawing.properties, openpyxl.drawing.spreadsheet_drawing, openpyxl.drawing.text, openpyxl.formatting.rule, openpyxl.packaging.workbook, openpyxl.pivot.cache, openpyxl.pivot.table, openpyxl.styles.alignment, openpyxl.styles.borders, openpyxl.styles.fills, openpyxl.styles.table, openpyxl.workbook.external_link.external, openpyxl.workbook.properties, openpyxl.workbook.protection, openpyxl.workbook.smart_tags, openpyxl.workbook.views, openpyxl.workbook.web, openpyxl.worksheet.datavalidation, openpyxl.worksheet.filters, openpyxl.worksheet.page, openpyxl.worksheet.table, openpyxl.worksheet.views
+? openpyxl.descriptors.Set            imported from openpyxl.cell.text, openpyxl.chart._chart, openpyxl.chart.area_chart, openpyxl.chart.axis, openpyxl.chart.bubble_chart, openpyxl.chart.error_bar, openpyxl.chartsheet.chartsheet, openpyxl.chartsheet.custom, openpyxl.chartsheet.publish, openpyxl.comments.comment_sheet, openpyxl.drawing.colors, openpyxl.drawing.effect, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.properties, openpyxl.drawing.text, openpyxl.formatting.rule, openpyxl.pivot.cache, openpyxl.pivot.table, openpyxl.styles.fills, openpyxl.styles.table, openpyxl.workbook.properties, openpyxl.workbook.protection, openpyxl.workbook.views, openpyxl.worksheet.filters, openpyxl.worksheet.views
+? openpyxl.descriptors.String         imported from -, openpyxl.cell.rich_text, openpyxl.cell.text, openpyxl.chart.axis, openpyxl.chart.chartspace, openpyxl.chart.data_source, openpyxl.chart.reference, openpyxl.chart.series, openpyxl.chart.trendline, openpyxl.chartsheet.properties, openpyxl.chartsheet.protection, openpyxl.chartsheet.publish, openpyxl.comments.comment_sheet, openpyxl.drawing.connector, openpyxl.drawing.effect, openpyxl.drawing.geometry, openpyxl.drawing.graphic, openpyxl.drawing.picture, openpyxl.drawing.properties, openpyxl.drawing.text, openpyxl.formatting.rule, openpyxl.packaging.custom, openpyxl.packaging.manifest, openpyxl.packaging.relationship, openpyxl.packaging.workbook, openpyxl.pivot.cache, openpyxl.pivot.fields, openpyxl.pivot.table, openpyxl.styles.colors, openpyxl.styles.named_styles, openpyxl.styles.numbers, openpyxl.styles.table, openpyxl.workbook.defined_name, openpyxl.workbook.external_link.external, openpyxl.workbook.function_group, openpyxl.workbook.properties, openpyxl.workbook.protection, openpyxl.workbook.smart_tags, openpyxl.workbook.views, openpyxl.workbook.web, openpyxl.worksheet.datavalidation, openpyxl.worksheet.dimensions, openpyxl.worksheet.filters, openpyxl.worksheet.header_footer, openpyxl.worksheet.hyperlink, openpyxl.worksheet.print_settings, openpyxl.worksheet.properties, openpyxl.worksheet.protection, openpyxl.worksheet.scenario, openpyxl.worksheet.table, openpyxl.worksheet.views
+? openpyxl.descriptors.Typed          imported from openpyxl.cell.rich_text, openpyxl.cell.text, openpyxl.chart._3d, openpyxl.chart._chart, openpyxl.chart.area_chart, openpyxl.chart.axis, openpyxl.chart.bar_chart, openpyxl.chart.bubble_chart, openpyxl.chart.chartspace, openpyxl.chart.data_source, openpyxl.chart.descriptors, openpyxl.chart.error_bar, openpyxl.chart.label, openpyxl.chart.layout, openpyxl.chart.legend, openpyxl.chart.line_chart, openpyxl.chart.marker, openpyxl.chart.pie_chart, openpyxl.chart.pivot, openpyxl.chart.plotarea, openpyxl.chart.print_settings, openpyxl.chart.radar_chart, openpyxl.chart.reference, openpyxl.chart.scatter_chart, openpyxl.chart.series, openpyxl.chart.shapes, openpyxl.chart.stock_chart, openpyxl.chart.surface_chart, openpyxl.chart.text, openpyxl.chart.title, openpyxl.chart.trendline, openpyxl.chart.updown_bars, openpyxl.chartsheet.chartsheet, openpyxl.chartsheet.custom, openpyxl.chartsheet.properties, openpyxl.chartsheet.views, openpyxl.comments.comment_sheet, openpyxl.drawing.colors, openpyxl.drawing.connector, openpyxl.drawing.effect, openpyxl.drawing.fill, openpyxl.drawing.geometry, openpyxl.drawing.graphic, openpyxl.drawing.line, openpyxl.drawing.picture, openpyxl.drawing.properties, openpyxl.drawing.spreadsheet_drawing, openpyxl.drawing.text, openpyxl.formatting.rule, openpyxl.packaging.extended, openpyxl.packaging.workbook, openpyxl.pivot.cache, openpyxl.pivot.fields, openpyxl.pivot.record, openpyxl.pivot.table, openpyxl.styles.borders, openpyxl.styles.cell_style, openpyxl.styles.colors, openpyxl.styles.differential, openpyxl.styles.named_styles, openpyxl.styles.stylesheet, openpyxl.styles.table, openpyxl.workbook.external_link.external, openpyxl.workbook.protection, openpyxl.workbook.views, openpyxl.workbook.web, openpyxl.worksheet.filters, openpyxl.worksheet.header_footer, openpyxl.worksheet.print_settings, openpyxl.worksheet.properties, openpyxl.worksheet.table, openpyxl.worksheet.views
+? org.python.core                     imported from copy, pickle, xml.sax
+? org.python.modules.posix.PosixModule imported from setuptools.sandbox
+? os.path                             imported from distutils.file_util, numpy.core.cversions, numpy.core.memmap, openpyxl.packaging.manifest, openpyxl.reader.excel, os, pkg_resources, pkgutil, platformdirs.macos, py_compile, pyarrow.filesystem, pytz, pytz.tzfile, sysconfig, tracemalloc, unittest, unittest.util
+? pandas.ExtensionArray               imported from pandas.core.construction
+? pandas.Float64Index                 imported from pandas.core.dtypes.generic, pandas.core.indexes.datetimes, pandas.core.internals.array_manager, pandas.core.internals.blocks
+? pandas.Int64Index                   imported from pandas.core.dtypes.generic
+? pandas.UInt64Index                  imported from pandas.core.dtypes.generic
+? pep517                              imported from importlib.metadata
+? pickle5                             imported from numpy.compat.py3k
+? pkg_resources.extern.importlib_resources imported from pkg_resources._vendor.jaraco.text
+? pkg_resources.extern.jaraco.context imported from pkg_resources._vendor.jaraco.text
+? pkg_resources.extern.jaraco.functools imported from pkg_resources._vendor.jaraco.text
+? pkg_resources.extern.jaraco.text    imported from pkg_resources
+? pkg_resources.extern.more_itertools imported from pkg_resources._vendor.jaraco.functools
+? pkg_resources.extern.packaging      imported from pkg_resources
+? pkg_resources.extern.platformdirs   imported from pkg_resources
+? psutil                              imported from numpy.testing._private.utils
+? pyarrow._dataset_orc                imported from pyarrow.dataset
+? pyarrow.parquet.ParquetDataset      imported from pyarrow.filesystem
+? pytest                              imported from numpy._pytesttester, numpy.testing._private.utils, pandas._testing, pandas._testing._io, pandas.util._tester
+? pyxlsb                              imported from pandas.io.excel._pyxlsb
+? qtpy                                imported from pandas.io.clipboard
+? qtpy.QtWidgets                      imported from pandas.io.clipboard
+? readline                            imported from cmd, code, pdb
+? scipy                               imported from pandas.core.missing
+? scipy.sparse                        imported from pandas.core.arrays.sparse.accessor, pandas.core.arrays.sparse.array, pandas.core.arrays.sparse.scipy_sparse, pandas.core.dtypes.common
+? scipy.stats                         imported from pandas.core.nanops
+? sets                                imported from pytz.tzinfo
+? setuptools.extern.importlib_metadata imported from setuptools._importlib
+? setuptools.extern.importlib_resources imported from setuptools._importlib
+? setuptools.extern.jaraco.text       imported from setuptools._reqs
+? setuptools.extern.more_itertools    imported from setuptools._itertools, setuptools.config.expand, setuptools.config.pyprojecttoml, setuptools.package_index
+? setuptools.extern.packaging         imported from setuptools.command.egg_info
+? setuptools.extern.packaging.requirements imported from setuptools._reqs
+? setuptools.extern.packaging.specifiers imported from setuptools.config._apply_pyprojecttoml
+? setuptools.extern.packaging.tags    imported from setuptools.wheel
+? setuptools.extern.packaging.utils   imported from setuptools.wheel
+? setuptools.extern.packaging.version imported from setuptools.wheel
+? setuptools.extern.tomli             imported from setuptools.config.pyprojecttoml
+? setuptools_scm                      imported from pyarrow
+? setuptools_scm.git                  imported from pyarrow
+? sphinx.ext.autodoc                  imported from pyarrow.vendored.docscrape
+? sql.LABEL_STYLE_DEFAULT             imported from sqlalchemy
+? sql.LABEL_STYLE_DISAMBIGUATE_ONLY   imported from sqlalchemy
+? sql.LABEL_STYLE_NONE                imported from sqlalchemy
+? sql.LABEL_STYLE_TABLENAME_PLUS_COL  imported from sqlalchemy
+? sql.alias                           imported from sqlalchemy
+? sql.all_                            imported from sqlalchemy
+? sql.and_                            imported from sqlalchemy
+? sql.any_                            imported from sqlalchemy
+? sql.asc                             imported from sqlalchemy
+? sql.between                         imported from sqlalchemy
+? sql.bindparam                       imported from sqlalchemy
+? sql.case                            imported from sqlalchemy
+? sql.cast                            imported from sqlalchemy
+? sql.collate                         imported from sqlalchemy
+? sql.column                          imported from sqlalchemy
+? sql.delete                          imported from sqlalchemy
+? sql.desc                            imported from sqlalchemy
+? sql.distinct                        imported from sqlalchemy
+? sql.except_                         imported from sqlalchemy
+? sql.except_all                      imported from sqlalchemy
+? sql.exists                          imported from sqlalchemy
+? sql.extract                         imported from sqlalchemy
+? sql.false                           imported from sqlalchemy
+? sql.func                            imported from sqlalchemy
+? sql.funcfilter                      imported from sqlalchemy
+? sql.insert                          imported from sqlalchemy
+? sql.intersect                       imported from sqlalchemy
+? sql.intersect_all                   imported from sqlalchemy
+? sql.join                            imported from sqlalchemy
+? sql.lambda_stmt                     imported from sqlalchemy
+? sql.lateral                         imported from sqlalchemy
+? sql.literal                         imported from sqlalchemy
+? sql.literal_column                  imported from sqlalchemy
+? sql.modifier                        imported from sqlalchemy
+? sql.not_                            imported from sqlalchemy
+? sql.null                            imported from sqlalchemy
+? sql.nulls_first                     imported from sqlalchemy
+? sql.nulls_last                      imported from sqlalchemy
+? sql.nullsfirst                      imported from sqlalchemy
+? sql.nullslast                       imported from sqlalchemy
+? sql.or_                             imported from sqlalchemy
+? sql.outerjoin                       imported from sqlalchemy
+? sql.outparam                        imported from sqlalchemy
+? sql.over                            imported from sqlalchemy
+? sql.select                          imported from sqlalchemy
+? sql.subquery                        imported from sqlalchemy
+? sql.table                           imported from sqlalchemy
+? sql.tablesample                     imported from sqlalchemy
+? sql.text                            imported from sqlalchemy
+? sql.true                            imported from sqlalchemy
+? sql.tuple_                          imported from sqlalchemy
+? sql.type_coerce                     imported from sqlalchemy
+? sql.union                           imported from sqlalchemy
+? sql.union_all                       imported from sqlalchemy
+? sql.update                          imported from sqlalchemy
+? sql.values                          imported from sqlalchemy
+? sql.within_group                    imported from sqlalchemy
+? tables                              imported from pandas.io.pytables
+? tests                               imported from openpyxl.reader.excel
+? threadpoolctl                       imported from numpy.lib.utils
+? trove_classifiers                   imported from setuptools.config._validate_pyproject.formats
+? urllib.quote                        imported from sqlalchemy.util.compat
+? urllib.quote_plus                   imported from sqlalchemy.util.compat
+? urllib.unquote                      imported from sqlalchemy.util.compat
+? urllib.unquote_plus                 imported from sqlalchemy.util.compat
+? urlparse                            imported from sqlalchemy.util.compat
+? util.HasMemoized                    imported from sqlalchemy.sql.base, sqlalchemy.sql.traversals
+? util.OrderedDict                    imported from sqlalchemy.sql.sqltypes
+? util.chop_traceback                 imported from sqlalchemy.pool.impl
+? util.collections_abc                imported from sqlalchemy.engine.result, sqlalchemy.engine.url, sqlalchemy.engine.util, sqlalchemy.sql.coercions, sqlalchemy.sql.dml, sqlalchemy.sql.lambdas, sqlalchemy.sql.traversals
+? util.hybridmethod                   imported from sqlalchemy.sql.base
+? util.immutabledict                  imported from sqlalchemy.engine.util
+? util.pickle                         imported from sqlalchemy.sql.sqltypes
+? util.py2k                           imported from sqlalchemy.engine.result
+? util.py311                          imported from sqlalchemy.log
+? util.py37                           imported from sqlalchemy.sql.traversals
+? util.py38                           imported from sqlalchemy.log
+? util.symbol                         imported from sqlalchemy.sql.visitors
+? util.threading                      imported from sqlalchemy.event.attr, sqlalchemy.pool.dbapi_proxy, sqlalchemy.pool.impl
+? xlwt                                imported from pandas.io.excel._xlwt
+? yaml                                imported from numpy.__config__
+Building 'dist\Main_Program_1099M_Restitution.exe'.
+Building shared code archive 'dist\library.zip'.
+Copy c:\program files\python39\python39.dll to dist
+Copy C:\Program Files\Python39\DLLs\select.pyd to dist\select.pyd
+Copy C:\Program Files\Python39\DLLs\_bz2.pyd to dist\_bz2.pyd
+Copy C:\Program Files\Python39\DLLs\_lzma.pyd to dist\_lzma.pyd
+Copy C:\Program Files\Python39\DLLs\_hashlib.pyd to dist\_hashlib.pyd
+Copy C:\Program Files\Python39\DLLs\unicodedata.pyd to dist\unicodedata.pyd
+Copy C:\Program Files\Python39\DLLs\pyexpat.pyd to dist\pyexpat.pyd
+Copy C:\Program Files\Python39\DLLs\_socket.pyd to dist\_socket.pyd
+Copy C:\Program Files\Python39\DLLs\_ssl.pyd to dist\_ssl.pyd
+Copy C:\Program Files\Python39\DLLs\_queue.pyd to dist\_queue.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_multiarray_umath.cp39-win_amd64.pyd to dist\numpy.core._multiarray_umath.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\linalg\_umath_linalg.cp39-win_amd64.pyd to dist\numpy.linalg._umath_linalg.pyd
+Copy C:\Program Files\Python39\DLLs\_ctypes.pyd to dist\_ctypes.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\win32\_win32sysloader.pyd to dist\_win32sysloader.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\win32\win32api.pyd to dist\win32api.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\charset_normalizer\md__mypyc.cp39-win_amd64.pyd to dist\charset_normalizer.md__mypyc.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\charset_normalizer\md.cp39-win_amd64.pyd to dist\charset_normalizer.md.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\win32\win32pdh.pyd to dist\win32pdh.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_umath_tests.cp39-win_amd64.pyd to dist\numpy.core._umath_tests.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_multiarray_tests.cp39-win_amd64.pyd to dist\numpy.core._multiarray_tests.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_operand_flag_tests.cp39-win_amd64.pyd to dist\numpy.core._operand_flag_tests.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_rational_tests.cp39-win_amd64.pyd to dist\numpy.core._rational_tests.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_simd.cp39-win_amd64.pyd to dist\numpy.core._simd.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\core\_struct_ufunc_tests.cp39-win_amd64.pyd to dist\numpy.core._struct_ufunc_tests.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\fft\_pocketfft_internal.cp39-win_amd64.pyd to dist\numpy.fft._pocketfft_internal.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\mtrand.cp39-win_amd64.pyd to dist\numpy.random.mtrand.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_philox.cp39-win_amd64.pyd to dist\numpy.random._philox.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_pcg64.cp39-win_amd64.pyd to dist\numpy.random._pcg64.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_sfc64.cp39-win_amd64.pyd to dist\numpy.random._sfc64.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_generator.cp39-win_amd64.pyd to dist\numpy.random._generator.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_mt19937.cp39-win_amd64.pyd to dist\numpy.random._mt19937.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_common.cp39-win_amd64.pyd to dist\numpy.random._common.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\_bounded_integers.cp39-win_amd64.pyd to dist\numpy.random._bounded_integers.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy\random\bit_generator.cp39-win_amd64.pyd to dist\numpy.random.bit_generator.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\interval.cp39-win_amd64.pyd to dist\pandas._libs.interval.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\dtypes.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.dtypes.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\conversion.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.conversion.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\nattype.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.nattype.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\np_datetime.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.np_datetime.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\offsets.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.offsets.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\period.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.period.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\timedeltas.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.timedeltas.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\timestamps.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.timestamps.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\timezones.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.timezones.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\tzconversion.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.tzconversion.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\vectorized.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.vectorized.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\properties.cp39-win_amd64.pyd to dist\pandas._libs.properties.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\hashtable.cp39-win_amd64.pyd to dist\pandas._libs.hashtable.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\lib.cp39-win_amd64.pyd to dist\pandas._libs.lib.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\hashing.cp39-win_amd64.pyd to dist\pandas._libs.hashing.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\algos.cp39-win_amd64.pyd to dist\pandas._libs.algos.pyd
+Copy C:\Program Files\Python39\DLLs\_decimal.pyd to dist\_decimal.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\missing.cp39-win_amd64.pyd to dist\pandas._libs.missing.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\arrays.cp39-win_amd64.pyd to dist\pandas._libs.arrays.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\ops_dispatch.cp39-win_amd64.pyd to dist\pandas._libs.ops_dispatch.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\reshape.cp39-win_amd64.pyd to dist\pandas._libs.reshape.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\reduction.cp39-win_amd64.pyd to dist\pandas._libs.reduction.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\index.cp39-win_amd64.pyd to dist\pandas._libs.index.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\join.cp39-win_amd64.pyd to dist\pandas._libs.join.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslib.cp39-win_amd64.pyd to dist\pandas._libs.tslib.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\fields.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.fields.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\ccalendar.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.ccalendar.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\parsing.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.parsing.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\lib.cp39-win_amd64.pyd to dist\pyarrow.lib.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_hdfsio.cp39-win_amd64.pyd to dist\pyarrow._hdfsio.pyd
+Copy C:\Program Files\Python39\DLLs\_uuid.pyd to dist\_uuid.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_parquet.cp39-win_amd64.pyd to dist\pyarrow._parquet.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_fs.cp39-win_amd64.pyd to dist\pyarrow._fs.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_hdfs.cp39-win_amd64.pyd to dist\pyarrow._hdfs.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_gcsfs.cp39-win_amd64.pyd to dist\pyarrow._gcsfs.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_s3fs.cp39-win_amd64.pyd to dist\pyarrow._s3fs.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_dataset.cp39-win_amd64.pyd to dist\pyarrow._dataset.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_compute.cp39-win_amd64.pyd to dist\pyarrow._compute.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_dataset_parquet.cp39-win_amd64.pyd to dist\pyarrow._dataset_parquet.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_dataset_parquet_encryption.cp39-win_amd64.pyd to dist\pyarrow._dataset_parquet_encryption.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\indexing.cp39-win_amd64.pyd to dist\pandas._libs.indexing.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\internals.cp39-win_amd64.pyd to dist\pandas._libs.internals.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\writers.cp39-win_amd64.pyd to dist\pandas._libs.writers.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\window\aggregations.cp39-win_amd64.pyd to dist\pandas._libs.window.aggregations.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\window\indexers.cp39-win_amd64.pyd to dist\pandas._libs.window.indexers.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\groupby.cp39-win_amd64.pyd to dist\pandas._libs.groupby.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\parsers.cp39-win_amd64.pyd to dist\pandas._libs.parsers.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\ops.cp39-win_amd64.pyd to dist\pandas._libs.ops.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\strptime.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.strptime.pyd
+Copy C:\Program Files\Python39\DLLs\_elementtree.pyd to dist\_elementtree.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\json.cp39-win_amd64.pyd to dist\pandas._libs.json.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\sqlalchemy\cimmutabledict.cp39-win_amd64.pyd to dist\sqlalchemy.cimmutabledict.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\greenlet\_greenlet.cp39-win_amd64.pyd to dist\greenlet._greenlet.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\sqlalchemy\cprocessors.cp39-win_amd64.pyd to dist\sqlalchemy.cprocessors.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\sqlalchemy\cresultproxy.cp39-win_amd64.pyd to dist\sqlalchemy.cresultproxy.pyd
+Copy C:\Program Files\Python39\DLLs\_sqlite3.pyd to dist\_sqlite3.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\_feather.cp39-win_amd64.pyd to dist\pyarrow._feather.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\sparse.cp39-win_amd64.pyd to dist\pandas._libs.sparse.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\testing.cp39-win_amd64.pyd to dist\pandas._libs.testing.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\io\sas\_sas.cp39-win_amd64.pyd to dist\pandas.io.sas._sas.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pandas\_libs\tslibs\base.cp39-win_amd64.pyd to dist\pandas._libs.tslibs.base.pyd
+Copy C:\Program Files\Python39\DLLs\_multiprocessing.pyd to dist\_multiprocessing.pyd
+Copy C:\Program Files\Python39\DLLs\_asyncio.pyd to dist\_asyncio.pyd
+Copy C:\Program Files\Python39\DLLs\_overlapped.pyd to dist\_overlapped.pyd
+Copy C:\Program Files\Python39\DLLs\_tkinter.pyd to dist\_tkinter.pyd
+Copy C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\cx_Oracle.cp39-win_amd64.pyd to dist\cx_Oracle.pyd
+Copy DLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\arrow_acero.dll to dist\
+Copy DLL C:\Program Files\Python39\DLLs\libffi-7.dll to dist\
+Copy DLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\numpy.libs\libopenblas64__v0.3.23-293-gc2f4bdbb-gcc_10_3_0-2bde3a66a51006b2b53eb373ff767a3f.dll to dist\
+Copy DLL C:\Program Files\Python39\DLLs\sqlite3.dll to dist\
+Copy DLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\arrow.dll to dist\
+Copy DLL C:\Program Files\Python39\DLLs\libssl-1_1.dll to dist\
+Copy DLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\arrow_dataset.dll to dist\
+Copy DLL C:\Program Files\Python39\DLLs\libcrypto-1_1.dll to dist\
+Copy DLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\parquet.dll to dist\
+Copy DLL C:\Program Files\Python39\DLLs\tk86t.dll to dist\
+Copy DLL C:\Program Files\Python39\DLLs\tcl86t.dll to dist\
+Copy ExtensionDLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pyarrow\arrow_python.dll to dist\
+Copy ExtensionDLL C:\Users\vdhand2\AppData\Roaming\Python\Python39\site-packages\pywin32_system32\pywintypes39.dll to dist\
