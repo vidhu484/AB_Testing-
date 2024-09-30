@@ -1,1 +1,55 @@
+import pandas as pd
+
+# Load the Excel file
+file_path = 'your_file_path.xlsx'  # replace with the actual file path
+df = pd.read_excel(file_path)
+
+# Ensure 'CIF' and 'ID' are strings and pad them with leading zeroes
+df['CIF'] = df['CIF'].astype(str).str.zfill(10)
+df['ID'] = df['ID'].astype(str).str.zfill(15)
+
+# Group by CIF and assign row numbers for each ID within the same CIF
+df['row_number'] = df.groupby('CIF').cumcount() + 1
+
+# Function to reshape the data properly for each CIF
+def reshape_data(df, max_ids=16):
+    # Create an empty list to store the results
+    final_data = []
+
+    # Group the data by CIF
+    grouped = df.groupby('CIF')
+
+    # Iterate over each group (each CIF)
+    for cif, group in grouped:
+        # Initialize a dictionary to hold the data for this CIF
+        cif_data = {'CIF': cif}
+
+        # Iterate over the IDs and corresponding amounts in this group
+        for i, row in group.iterrows():
+            row_num = row['row_number']
+            cif_data[f'ID_{str(row_num).zfill(2)}'] = row['ID']
+            cif_data[f'Amt_Old_{str(row_num).zfill(2)}'] = row['Amt_Old']
+            cif_data[f'Amt_New_{str(row_num).zfill(2)}'] = row['Amt_New']
+        
+        # If this CIF has fewer than max_ids, pad with empty values
+        for j in range(len(group) + 1, max_ids + 1):
+            cif_data[f'ID_{str(j).zfill(2)}'] = None
+            cif_data[f'Amt_Old_{str(j).zfill(2)}'] = None
+            cif_data[f'Amt_New_{str(j).zfill(2)}'] = None
+        
+        # Append the result for this CIF to the final data list
+        final_data.append(cif_data)
+
+    # Convert the list of dictionaries into a DataFrame
+    final_df = pd.DataFrame(final_data)
+
+    return final_df
+
+# Process the data and reshape it with up to 16 IDs per CIF
+pivoted_df = reshape_data(df, max_ids=16)
+
+# Save the result to a new Excel file
+pivoted_df.to_excel('pivoted_data_corrected.xlsx', index=False)
+
+print("Pivoted data saved to 'pivoted_data_corrected.xlsx'")
 
