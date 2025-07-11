@@ -1,12 +1,14 @@
+########################################
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import pandas as pd
 from pandasql import sqldf
 import os
 from datetime import datetime
-import csv # Import for the quoting constant
+import csv
 
 # --- Standard Column Names ---
+# The application will RENAME the columns from the file to match this structure.
 TBL_COLUMNS = [
     'ACID', '1099_Type', '1099_Amt', '1099_Source', 'Date_of_Transaction', 
     'Borrower_CIF', 'Cosigner_CIF'
@@ -80,7 +82,7 @@ class DataProcessorApp:
             self.validate_button.config(state=tk.DISABLED)
             self.process_button.config(state=tk.DISABLED)
             self.log_message(f"Selected {os.path.basename(file_path)}. Please load the data.")
-            
+
     def browse_tbl_file(self): self.browse_file(self.tbl_file_path, "1099MTbl")
     def browse_tran_file(self): self.browse_file(self.tran_file_path, "1099MTran")
 
@@ -99,39 +101,43 @@ class DataProcessorApp:
             self.log_message("-> FAILED: Data loading failed. Check logs for details.")
 
     def load_and_transform_data(self):
-        """Loads data, validates by column COUNT, renames headers, and applies transformations."""
+        """Loads data, handles trailing delimiters, renames headers, and applies transformations."""
         try:
             self.log_message("--- Starting Data Loading and Transformation ---")
             
-            # --- Load 1099MTbl with robust settings ---
+            # --- Load 1099MTbl with intelligent validation ---
             self.log_message("Loading 1099MTbl file...")
-            df_tbl = pd.read_csv(
-                self.tbl_file_path.get(), 
-                sep='|', 
-                dtype=str, 
-                skipinitialspace=True,
-                engine='python',        # Use the more robust python engine
-                quoting=csv.QUOTE_NONE  # THIS IS THE KEY: Ignore all quote characters
-            )
-            if len(df_tbl.columns) != len(TBL_COLUMNS):
-                # (Validation logic remains the same)
+            df_tbl = pd.read_csv(self.tbl_file_path.get(), sep='|', dtype=str, skipinitialspace=True, engine='python', quoting=csv.QUOTE_NONE)
+            num_cols_found = len(df_tbl.columns)
+            num_cols_expected = len(TBL_COLUMNS)
+
+            if num_cols_found == num_cols_expected + 1:
+                self.log_message(f"-> Detected a trailing delimiter in 1099MTbl. Dropping extra empty column.")
+                df_tbl = df_tbl.iloc[:, :-1] # Drop the last column
+            elif num_cols_found != num_cols_expected:
+                msg = f"Column count mismatch in {os.path.basename(self.tbl_file_path.get())}. Expected {num_cols_expected}, but found {num_cols_found}."
+                messagebox.showerror("File Format Error", msg)
+                self.log_message(f"ERROR: {msg}")
                 return False
+            
             df_tbl.columns = TBL_COLUMNS
             self.df_1099MTbl = df_tbl
 
-            # --- Load 1099MTran with robust settings ---
+            # --- Load 1099MTran with intelligent validation ---
             self.log_message("Loading 1099MTran file...")
-            df_tran = pd.read_csv(
-                self.tran_file_path.get(), 
-                sep='|', 
-                dtype=str, 
-                skipinitialspace=True,
-                engine='python',        # Use the more robust python engine
-                quoting=csv.QUOTE_NONE  # THIS IS THE KEY: Ignore all quote characters
-            )
-            if len(df_tran.columns) != len(TRAN_COLUMNS):
-                # (Validation logic remains the same)
+            df_tran = pd.read_csv(self.tran_file_path.get(), sep='|', dtype=str, skipinitialspace=True, engine='python', quoting=csv.QUOTE_NONE)
+            num_cols_found = len(df_tran.columns)
+            num_cols_expected = len(TRAN_COLUMNS)
+
+            if num_cols_found == num_cols_expected + 1:
+                self.log_message(f"-> Detected a trailing delimiter in 1099MTran. Dropping extra empty column.")
+                df_tran = df_tran.iloc[:, :-1] # Drop the last column
+            elif num_cols_found != num_cols_expected:
+                msg = f"Column count mismatch in {os.path.basename(self.tran_file_path.get())}. Expected {num_cols_expected}, but found {num_cols_found}."
+                messagebox.showerror("File Format Error", msg)
+                self.log_message(f"ERROR: {msg}")
                 return False
+
             df_tran.columns = TRAN_COLUMNS
             self.df_1099MTran = df_tran
             
