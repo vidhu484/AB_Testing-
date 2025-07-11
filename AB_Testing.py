@@ -1,4 +1,3 @@
-########################################
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import pandas as pd
@@ -8,7 +7,6 @@ from datetime import datetime
 import csv
 
 # --- Standard Column Names ---
-# The application will RENAME the columns from the file to match this structure.
 TBL_COLUMNS = [
     'ACID', '1099_Type', '1099_Amt', '1099_Source', 'Date_of_Transaction', 
     'Borrower_CIF', 'Cosigner_CIF'
@@ -19,9 +17,50 @@ TRAN_COLUMNS = [
     'Agent_ID_System_Processes_ID', 'Tran_Description', 'Tran_Remarks', 'Cosigner_CIF'
 ]
 
+def load_dat_file_manually(file_path, expected_columns):
+    """
+    Manually parses a pipe-delimited file line by line for maximum robustness.
+    This function is designed to overcome common pandas parsing errors.
+    """
+    with open(file_path, 'r', encoding='latin1') as f:
+        # Read header and data separately
+        header_line = f.readline().strip()
+        data_lines = f.readlines()
+
+    # Process header
+    headers = [h.strip() for h in header_line.split('|')]
+    
+    # Handle trailing delimiter in header
+    if headers[-1] == '':
+        headers.pop()
+
+    # Process data lines
+    parsed_data = []
+    for line in data_lines:
+        if line.strip():  # Skip empty lines
+            fields = [field.strip() for field in line.strip().split('|')]
+            # Handle trailing delimiter in data row
+            if len(fields) > len(headers):
+                fields.pop()
+            parsed_data.append(fields)
+    
+    # Create DataFrame
+    df = pd.DataFrame(parsed_data, dtype=str)
+    
+    # Final validation and column renaming
+    num_cols_found = len(df.columns)
+    num_cols_expected = len(expected_columns)
+    
+    if num_cols_found != num_cols_expected:
+        raise ValueError(f"Column count mismatch in {os.path.basename(file_path)}. "
+                         f"Expected {num_cols_expected}, but found {num_cols_found}.")
+    
+    df.columns = expected_columns
+    return df
+
+
 class DataProcessorApp:
     def __init__(self, root):
-        # ... (init method is unchanged)
         self.root = root
         self.root.title("1099 Data Processing Tool")
         self.root.geometry("800x700")
@@ -36,7 +75,6 @@ class DataProcessorApp:
         self.create_widgets()
 
     def log_message(self, message):
-        # ... (log_message method is unchanged)
         self.status_log.config(state=tk.NORMAL)
         self.status_log.insert(tk.END, message + "\n")
         self.status_log.see(tk.END)
@@ -44,7 +82,6 @@ class DataProcessorApp:
         self.root.update_idletasks()
         
     def create_widgets(self):
-        # ... (create_widgets method is unchanged)
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.pack(fill=tk.BOTH, expand=True)
         file_frame = ttk.LabelFrame(main_frame, text="Step 1: Upload Input Files", padding="10")
@@ -75,7 +112,6 @@ class DataProcessorApp:
         self.status_log.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def browse_file(self, path_var, title):
-        # ... (browse_file method is unchanged)
         file_path = filedialog.askopenfilename(title=f"Select {title} File", filetypes=(("Data Files", "*.dat"), ("All files", "*.*")))
         if file_path:
             path_var.set(file_path)
@@ -87,59 +123,28 @@ class DataProcessorApp:
     def browse_tran_file(self): self.browse_file(self.tran_file_path, "1099MTran")
 
     def run_load_and_transform(self):
-        # ... (run_load_and_transform method is unchanged)
         if not self.tbl_file_path.get() or not self.tran_file_path.get():
             messagebox.showerror("Input Error", "Please select both input files before loading.")
             return
         if self.load_and_transform_data():
             self.validate_button.config(state=tk.NORMAL)
             self.process_button.config(state=tk.NORMAL)
-            self.log_message(f"-> SUCCESS: Data is loaded. 1099MTbl has {len(self.df_1099MTbl)} records. 1099MTran has {len(self.df_1099MTran)} records.")
+            self.log_message(f"-> SUCCESS: Data loaded. 1099MTbl: {len(self.df_1099MTbl)} records. 1099MTran: {len(self.df_1099MTran)} records.")
         else:
             self.validate_button.config(state=tk.DISABLED)
             self.process_button.config(state=tk.DISABLED)
             self.log_message("-> FAILED: Data loading failed. Check logs for details.")
 
     def load_and_transform_data(self):
-        """Loads data, handles trailing delimiters, renames headers, and applies transformations."""
+        """Loads data using a manual parser and then applies transformations."""
         try:
-            self.log_message("--- Starting Data Loading and Transformation ---")
+            self.log_message("--- Starting Manual Data Loading ---")
             
-            # --- Load 1099MTbl with intelligent validation ---
-            self.log_message("Loading 1099MTbl file...")
-            df_tbl = pd.read_csv(self.tbl_file_path.get(), sep='|', dtype=str, skipinitialspace=True, engine='python', quoting=csv.QUOTE_NONE)
-            num_cols_found = len(df_tbl.columns)
-            num_cols_expected = len(TBL_COLUMNS)
-
-            if num_cols_found == num_cols_expected + 1:
-                self.log_message(f"-> Detected a trailing delimiter in 1099MTbl. Dropping extra empty column.")
-                df_tbl = df_tbl.iloc[:, :-1] # Drop the last column
-            elif num_cols_found != num_cols_expected:
-                msg = f"Column count mismatch in {os.path.basename(self.tbl_file_path.get())}. Expected {num_cols_expected}, but found {num_cols_found}."
-                messagebox.showerror("File Format Error", msg)
-                self.log_message(f"ERROR: {msg}")
-                return False
+            self.df_1099MTbl = load_dat_file_manually(self.tbl_file_path.get(), TBL_COLUMNS)
+            self.log_message("-> 1099MTbl file loaded manually and columns renamed.")
             
-            df_tbl.columns = TBL_COLUMNS
-            self.df_1099MTbl = df_tbl
-
-            # --- Load 1099MTran with intelligent validation ---
-            self.log_message("Loading 1099MTran file...")
-            df_tran = pd.read_csv(self.tran_file_path.get(), sep='|', dtype=str, skipinitialspace=True, engine='python', quoting=csv.QUOTE_NONE)
-            num_cols_found = len(df_tran.columns)
-            num_cols_expected = len(TRAN_COLUMNS)
-
-            if num_cols_found == num_cols_expected + 1:
-                self.log_message(f"-> Detected a trailing delimiter in 1099MTran. Dropping extra empty column.")
-                df_tran = df_tran.iloc[:, :-1] # Drop the last column
-            elif num_cols_found != num_cols_expected:
-                msg = f"Column count mismatch in {os.path.basename(self.tran_file_path.get())}. Expected {num_cols_expected}, but found {num_cols_found}."
-                messagebox.showerror("File Format Error", msg)
-                self.log_message(f"ERROR: {msg}")
-                return False
-
-            df_tran.columns = TRAN_COLUMNS
-            self.df_1099MTran = df_tran
+            self.df_1099MTran = load_dat_file_manually(self.tran_file_path.get(), TRAN_COLUMNS)
+            self.log_message("-> 1099MTran file loaded manually and columns renamed.")
             
             # --- Apply Transformations ---
             self.log_message("Applying data transformations...")
@@ -159,7 +164,6 @@ class DataProcessorApp:
 
     # All subsequent methods (save_tran_for_validation, execute_sql, etc.) remain unchanged.
     def save_tran_for_validation(self):
-        # ...
         self.log_message("--- Validation Step: Saving transformed 1099MTran data ---")
         if self.df_1099MTran is None or self.df_1099MTran.empty:
             messagebox.showwarning("No Data", "1099MTran data is not available to save.")
@@ -175,7 +179,6 @@ class DataProcessorApp:
             messagebox.showerror("Save Error", f"Failed to save the validation file.\n\nError: {e}")
 
     def execute_sql(self, query, query_name, tables):
-        # ...
         self.log_message(f"Executing {query_name}...")
         try:
             pysqldf = lambda q: sqldf(q, tables)
@@ -189,7 +192,6 @@ class DataProcessorApp:
             return None
 
     def save_final_report(self, df):
-        # ...
         self.log_message("Saving final report to Excel...")
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -202,7 +204,6 @@ class DataProcessorApp:
             messagebox.showerror("Save Error", f"Failed to save the Excel file.\n\nError: {e}")
             
     def run_sql_processing(self):
-        # ...
         if self.df_1099MTran is None or self.df_1099MTbl is None:
             messagebox.showerror("Error", "Data is not loaded. Please use the 'Load & Transform Files' button first.")
             return
