@@ -1,124 +1,253 @@
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.stats.power import NormalIndPower
-from scipy import stats
-import statsmodels.api as sms
-from statsmodels.stats.weightstats import ztest, CompareMeans
+from pandasql import sqldf
+import os
 
-from pathlib import Path
+# Define the column names as constants for easy management
+TBL_COLUMNS = [
+    'ACID', '1099_Type', '1099_Amt', '1099_Source', 'Date_of_Transaction', 
+    'Borrower_CIF', 'Cosigner_CIF'
+]
 
-# --- PATH SETTINGS ---
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+TRAN_COLUMNS = [
+    'ACID', 'Loan_Number', 'Borrower_CIF', 'Value_Date', 'UTC', 'Tran_Date', 
+    'Tran_ID', 'Tran_Total', 'Tran_Prin', 'Tran_INT', 'Tran_Fee', 
+    'Agent_ID_System_Processes_ID', 'Tran_Description', 'Tran_Remarks', 'Cosigner_CIF'
+]
 
-# Read in the data
-file = current_dir/"data"/"redesign.csv"
+class DataProcessorApp:
+    def __init__(self, root):
+        """Initialize the application."""
+        self.root = root
+        self.root.title("1099 Data Processing Tool")
+        self.root.geometry("800x600")
 
-data = pd.read_csv(file)
-data.info()
+        # Style configuration
+        self.style = ttk.Style(self.root)
+        self.style.theme_use("clam") # You can try other themes like 'alt', 'default', 'classic'
 
-''' 
-#The dataframe given in the input is composed of 3 columns and 40484 rows. The columns 'treatment' and 'new_images' are of type object while 'converted' is an int64. 
-# Moreover, there is no missing data in the dataframe. Below are the meanings of each of the columns:
+        # File paths
+        self.tbl_file_path = tk.StringVar()
+        self.tran_file_path = tk.StringVar()
 
-- 'treatment' - "yes" if the user saw the new version of the main web page, no otherwise.
-- 'new_images' - "yes" if the page used a new set of images, No otherwise.
-- 'converted' - 1 if the user subscribed to site, 0 means no.
+        # DataFrames
+        self.df_1099MTbl = None
+        self.df_1099MTran = None
 
-'''
+        self.create_widgets()
+
+    def log_message(self, message):
+        """Adds a message to the status log."""
+        self.status_log.config(state=tk.NORMAL)
+        self.status_log.insert(tk.END, message + "\n")
+        self.status_log.see(tk.END) # Scroll to the end
+        self.status_log.config(state=tk.DISABLED)
+        self.root.update_idletasks()
+
+    def create_widgets(self):
+        """Create and layout all the GUI widgets."""
+        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # --- File Selection Frame ---
+        file_frame = ttk.LabelFrame(main_frame, text="Step 1: Upload Input Files", padding="10")
+        file_frame.pack(fill=tk.X, padx=5, pady=5)
+        file_frame.grid_columnconfigure(1, weight=1)
+
+        # 1099MTbl file
+        ttk.Label(file_frame, text="1099MTbl File (.dat):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+        ttk.Entry(file_frame, textvariable=self.tbl_file_path, state="readonly").grid(row=0, column=1, padx=5, pady=5, sticky=tk.EW)
+        ttk.Button(file_frame, text="Browse...", command=self.browse_tbl_file).grid(row=0, column=2, padx=5, pady=5)
+
+        # 1099MTran file
+        ttk.Label(file_frame, text="1099MTran File (.dat):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
+        ttk.Entry(file_frame, textvariable=self.tran_file_path, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky=tk.EW)
+        ttk.Button(file_frame, text="Browse...", command=self.browse_tran_file).grid(row=1, column=2, padx=5, pady=5)
+
+        # --- Processing Frame ---
+        process_frame = ttk.LabelFrame(main_frame, text="Step 2: Process Data", padding="10")
+        process_frame.pack(fill=tk.X, padx=5, pady=10)
+
+        process_button = ttk.Button(process_frame, text="Process Files and Generate Report", command=self.process_data)
+        process_button.pack(pady=10, padx=20, fill=tk.X)
+
+        # --- Status Log Frame ---
+        status_frame = ttk.LabelFrame(main_frame, text="Status Log", padding="10")
+        status_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        self.status_log = tk.Text(status_frame, height=15, state=tk.DISABLED, wrap=tk.WORD, bg="#f0f0f0")
+        scrollbar = ttk.Scrollbar(status_frame, command=self.status_log.yview)
+        self.status_log.config(yscrollcommand=scrollbar.set)
+        
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.status_log.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    def browse_file(self, path_var, title):
+        """Opens a file dialog to select a .dat file."""
+        file_path = filedialog.askopenfilename(
+            title=title,
+            filetypes=(("Data Files", "*.dat"), ("All files", "*.*"))
+        )
+        if file_path:
+            path_var.set(file_path)
+            self.log_message(f"Selected {os.path.basename(file_path)} for {title}")
+
+    def browse_tbl_file(self):
+        self.browse_file(self.tbl_file_path, "1099MTbl")
+
+    def browse_tran_file(self):
+        self.browse_file(self.tran_file_path, "1099MTran")
+
+    def load_and_transform_data(self):
+        """Loads data from files and applies necessary transformations."""
+        try:
+            self.log_message("Loading 1099MTbl file...")
+            self.df_1099MTbl = pd.read_csv(
+                self.tbl_file_path.get(),
+                sep='|',
+                header=None,
+                names=TBL_COLUMNS,
+                dtype=str # Load all as string to preserve leading zeros
+            )
+            self.log_message(f"-> Success: Loaded {len(self.df_1099MTbl)} rows into 1099MTbl DataFrame.")
+
+            self.log_message("Loading 1099MTran file...")
+            self.df_1099MTran = pd.read_csv(
+                self.tran_file_path.get(),
+                sep='|',
+                header=None,
+                names=TRAN_COLUMNS,
+                dtype=str # Load all as string
+            )
+            self.log_message(f"-> Success: Loaded {len(self.df_1099MTran)} rows into 1099MTran DataFrame.")
+            
+            # --- Data Transformation ---
+            self.log_message("Applying data transformations...")
+
+            # Format dates (mm/dd/yyyy)
+            date_cols_tbl = ['Date_of_Transaction']
+            for col in date_cols_tbl:
+                self.df_1099MTbl[col] = pd.to_datetime(self.df_1099MTbl[col], errors='coerce').dt.strftime('%m/%d/%Y')
+            
+            date_cols_tran = ['Value_Date', 'Tran_Date']
+            for col in date_cols_tran:
+                self.df_1099MTran[col] = pd.to_datetime(self.df_1099MTran[col], errors='coerce').dt.strftime('%m/%d/%Y')
+            
+            self.log_message("-> Dates formatted to MM/DD/YYYY.")
+
+            # Pad with leading zeros
+            self.df_1099MTbl['Borrower_CIF'] = self.df_1099MTbl['Borrower_CIF'].str.zfill(10)
+            self.df_1099MTbl['Cosigner_CIF'] = self.df_1099MTbl['Cosigner_CIF'].str.zfill(10)
+            
+            self.df_1099MTran['Borrower_CIF'] = self.df_1099MTran['Borrower_CIF'].str.zfill(10)
+            self.df_1099MTran['Cosigner_CIF'] = self.df_1099MTran['Cosigner_CIF'].str.zfill(10)
+            self.df_1099MTran['Loan_Number'] = self.df_1099MTran['Loan_Number'].str.zfill(15)
+            
+            self.log_message("-> Padded CIF and Loan_Number columns with leading zeros.")
+            self.log_message("Transformation complete.")
+            return True
+
+        except Exception as e:
+            messagebox.showerror("Loading Error", f"Failed to load or transform files.\n\nError: {e}")
+            self.log_message(f"ERROR: {e}")
+            return False
+
+    def execute_sql_query(self):
+        """Executes the SQL query on the loaded DataFrames."""
+        self.log_message("Executing SQL query...")
+        
+        # Make DataFrames available to pandasql
+        df_1099MTbl = self.df_1099MTbl
+        df_1099MTran = self.df_1099MTran
+
+        # ===================================================================
+        # TODO: REPLACE THIS WITH YOUR ACTUAL PSQL QUERY
+        #
+        # This is a sample query that joins the two tables on ACID and CIF.
+        # You will replace the content of this `query` variable with your own.
+        # ===================================================================
+        query = """
+        SELECT
+            t1.ACID,
+            t1."1099_Type",
+            t1."1099_Amt",
+            t2.Loan_Number,
+            t2.Tran_Date,
+            t2.Tran_Description,
+            t1.Borrower_CIF,
+            t1.Cosigner_CIF
+        FROM
+            df_1099MTbl t1
+        JOIN
+            df_1099MTran t2 ON t1.ACID = t2.ACID AND t1.Borrower_CIF = t2.Borrower_CIF
+        WHERE
+            t1."1099_Type" = 'INT' -- Example filter
+        ORDER BY
+            t2.Tran_Date;
+        """
+        
+        try:
+            # The sqldf function requires a function wrapper to access local variables
+            pysqldf = lambda q: sqldf(q, locals())
+            result_df = pysqldf(query)
+            
+            self.log_message(f"-> Success: Query executed, {len(result_df)} rows in result set.")
+            return result_df
+            
+        except Exception as e:
+            messagebox.showerror("SQL Query Error", f"The SQL query failed to execute.\n\nError: {e}")
+            self.log_message(f"ERROR executing SQL: {e}")
+            return None
+
+    def save_to_excel(self, df):
+        """Saves the final DataFrame to an Excel file."""
+        self.log_message("Saving results to Excel...")
+        
+        save_path = filedialog.asksaveasfilename(
+            title="Save Report As",
+            defaultextension=".xlsx",
+            filetypes=(("Excel Files", "*.xlsx"), ("All files", "*.*"))
+        )
+        
+        if not save_path:
+            self.log_message("Save operation cancelled by user.")
+            return
+
+        try:
+            df.to_excel(save_path, index=False)
+            self.log_message(f"SUCCESS! Report saved to:\n{save_path}")
+            messagebox.showinfo("Success", f"Report successfully generated and saved to\n{save_path}")
+        except Exception as e:
+            messagebox.showerror("Save Error", f"Failed to save the Excel file.\n\nError: {e}")
+            self.log_message(f"ERROR saving Excel file: {e}")
+
+    def process_data(self):
+        """Main function to orchestrate the entire data processing workflow."""
+        # 1. Validate inputs
+        if not self.tbl_file_path.get() or not self.tran_file_path.get():
+            messagebox.showerror("Input Error", "Please select both 1099MTbl and 1099MTran files.")
+            return
+
+        # 2. Load and Transform Data
+        if not self.load_and_transform_data():
+            return # Stop if loading failed
+
+        # 3. Execute SQL Query
+        final_df = self.execute_sql_query()
+        if final_df is None:
+            return # Stop if query failed
+
+        if final_df.empty:
+            self.log_message("WARNING: The query produced no results. Nothing to save.")
+            messagebox.showwarning("No Results", "The query executed successfully but produced no results.")
+            return
+
+        # 4. Save to Excel
+        self.save_to_excel(final_df)
 
 
-""" 
-## Methodology
-
-### Summary
-
-This is a classic A/B test problem. The approach I explain here will be to calculate the conversion rate (user coming to the landing page and going through with a purchase) of both the landing pages. 
-Statistically, since the problem only wants to increase the number of customers, we will use the one-tailed hypothesis test. 
-The metric of measure is the conversion rate and additionally, we will use the z-test to establish a confidence interval in which our test will not give any errors (type II)
-
-The general workflow of testing any hypothesis follows the same set of steps and instructions. We start with the null hypothesis, introduce evidence to compare the null hypothesis with an alternate hypothesis. Then, we conclude if the new evidence could confidently overturn the null hypothesis. In either scenario, we should always make it a point to test the analysis for possible errors.
-"""
-
-# Create a new column 'user_id' to randomly assign the users to either control or treatment group
-data['user_id'] = range(1, len(data) + 1) #is used to create a new column named 'user_id' and assigns a unique value to each user in the dataframe.
-
-data = data.sample(frac=1, random_state=1).reset_index(drop=True) # is used to randomly shuffle the rows of the dataframe and reset the index. This is to ensure that the users are randomly assigned to either the control or the treatment group.
-
-# Split the data into control and treatment groups
-control = data[data['user_id'] <= len(data) // 2]
-treatment = data[data['user_id'] > len(data) // 2]
-
-# Calculate the pre-test conversion rate
-pre_test_conversion_rate = data["converted"].mean() #is used to calculate the pre-test conversion rate by taking the mean of the 'converted' column for the whole dataframe.
-
-""" 
-### is used to perform an independent samples t-test to compare the means of the 'converted' column for the treatment and control groups. 
-# The t-value and p-value are stored in the variables t and p respectively.
-##t-test: A t-test is a statistical test that compares the means of two groups to determine if there is a significant difference between them. In this case, the independent samples t-test is used to compare the means of the 'converted' column for the treatment group and the control group. The t-test calculates a t-value, which measures the difference between the means of the two groups in terms of the number of standard deviations. The t-test also calculates a p-value, which represents the probability that the difference between the means is due to random chance. A small p-value (typically less than 0.05) suggests that the difference between the means is statistically significant and not due to random chance.
-
-#
-#
-
-"""
-
-t, p = stats.ttest_ind(treatment["converted"], control["converted"])
-
-
-##  is used to calculate the effect size, which is a measure of the magnitude of the difference between the means of the two groups.
-##
-##
-
-# Calculate the effect size
-effect_size = t * np.sqrt(len(treatment) + len(control))
-
-# Calculate the 95% Confidence Interval
-CI = stats.t.interval(alpha = 0.95, df = len(treatment) + len(control) - 2, loc = t, scale = stats.sem(np.concatenate((treatment["converted"], control["converted"]))))
-
-
-#is used to check if the p-value is less than 0.05, which is the threshold for determining statistical significance. 
-# If the p-value is less than 0.05, it suggests that the difference in means between the treatment and control groups is statistically significant, 
-# and the new design is effective. # Else the new design is not effective.
-#
-
-
-if p < 0.05:
-    print("The new design is effective.")
-    print("The pre-test conversion rate is: ", pre_test_conversion_rate)
-    print("The effect size is: ", effect_size)
-    print("The 95% Confidence Interval is: ", CI)
-else:
-    print("The new design is not effective.")
-    print("The pre-test conversion rate is: ", pre_test_conversion_rate)
-    print("The effect size is: ", effect_size)
-    print("The 95% Confidence Interval is: ", CI)
-
-
-    """ 
-
-    ### Conclusion
-    
-The output suggests that the new design is not effective. The p-value is greater than 0.05, which means that there is not enough evidence to suggest that the conversion rate for the treatment group is different from the pre-test conversion rate.
-
-The effect size, which is calculated as the t-value multiplied by the square root of the sample size, is negative and large in absolute value, this indicates that the difference in means between the two groups is large.
-
-The 95% Confidence Interval also indicates that the true difference in means is negative and is likely to be between -0.426 and -0.420, which further confirms that the new design is not effective.
-
-case, the effect size is -85.16505002535685, which is a large negative value. This means that the mean of the 'converted' column for the treatment group is much smaller than the mean of the 'converted' column for the control group.
-A negative effect size means that the new design has a negative impact on the conversion rate, which means that the new design is not effective in increasing the number of people who click through and join the site.
-
-To understand the magnitude of the effect size, it's helpful to compare it to the guidelines provided by Cohen (1988) that I mentioned in my previous response:
-
-Effect sizes of 0.2 are considered small,
-Effect sizes of 0.5 are considered medium,
-Effect sizes of 0.8 or greater are considered large.
-An effect size of -85.16505002535685 is well beyond the range of a large effect size. This means that the difference in means between the treatment and control groups is very large and the new design has a huge negative impact on the conversion rate.
-
-It's important to keep in mind that effect size is just one aspect to consider when interpreting the results of a study. Other factors such as sample size, power, and statistical significance also play a role in interpreting the results.
-
-In this case, the t-test also indicates that the difference in means is statistically significant with a p-value less than 0.05, which supports the conclusion that the new design is not effective in increasing the number of people who click through and join the site.
-
-It's important to consider these results in the context of the website's goals and the broader business context. 
-Other factors such as user feedback and the cost of implementing the new design should also be taken into account before making a decision about whether to implement the new design or not.
-    
-    """
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = DataProcessorApp(root)
+    root.mainloop()
