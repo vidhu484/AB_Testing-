@@ -1,58 +1,87 @@
-# diagnose_local_files.py
+# file_doctor.py
 import os
 
-def diagnose(file_path, num_lines=20):
+def find_first_bad_line(file_path, expected_columns):
     """
-    Reads the first few lines of a file in binary mode to diagnose its structure.
-    This helps identify issues with encoding, delimiters, and line endings.
+    Scans an entire file to find the first line that doesn't match the
+    expected number of pipe delimiters. This is the ultimate diagnostic tool.
     """
     if not os.path.exists(file_path):
         print(f"--- ERROR: File not found at '{file_path}' ---")
-        print("--- Please make sure this script is in the same folder as your .dat file. ---")
         return
 
-    print(f"--- Diagnosing file: {os.path.basename(file_path)} ---")
-    print(f"--- Reading first {num_lines} lines ---\n")
+    print(f"--- Running File Doctor on: {os.path.basename(file_path)} ---")
+    print(f"--- Expecting {expected_columns} columns, which means {expected_columns - 1} pipe '|' delimiters per line. ---")
 
     try:
-        # 'rb' = Read as Binary. This is crucial for seeing the true byte structure.
+        # Read the entire file's raw bytes first. This is crucial.
         with open(file_path, 'rb') as f:
-            for i in range(num_lines):
-                raw_line_bytes = f.readline()
-                if not raw_line_bytes:
-                    print("\n--- End of file reached. ---")
-                    break
+            content = f.read()
 
-                print(f"Line {i+1}:")
-                # 1. Show the raw bytes as Python sees them.
-                #    Look for \r\n (Windows), \n (Unix), or something else.
-                print(f"  Raw Bytes: {repr(raw_line_bytes)}")
+        # Try to decode the byte string. Use a robust fallback.
+        try:
+            lines = content.decode('utf-8').splitlines()
+            encoding_used = 'utf-8'
+        except UnicodeDecodeError:
+            print("UTF-8 decoding failed. Falling back to latin-1.")
+            lines = content.decode('latin1').splitlines()
+            encoding_used = 'latin1'
+            
+        print(f"--- File decoded using '{encoding_used}'. Scanning {len(lines)} lines... ---\n")
 
-                # 2. Try to decode it as a string and see how it splits.
-                #    'latin1' is a robust encoding that never fails.
-                try:
-                    decoded_line = raw_line_bytes.decode('latin1')
-                    parts = decoded_line.strip().split('|')
-                    print(f"  Split Count (using '|'): {len(parts)} parts")
-                except Exception as e:
-                    print(f"  Could not decode or split line. Error: {e}")
+        # Determine the expected delimiter count from the header row.
+        if not lines:
+            print("--- ERROR: File is empty. ---")
+            return
+            
+        header_line = lines[0]
+        expected_delimiters = header_line.count('|')
+        
+        # Adjust for possible trailing delimiter
+        if header_line.endswith('|'):
+            expected_delimiters -=1
 
-                print("-" * 20)
+        print(f"Header has {expected_delimiters} delimiters. All data lines should match this.")
+        
+        # Scan every single data line
+        for i, line in enumerate(lines[1:]):
+            current_delimiters = line.count('|')
+            line_number_in_file = i + 2 # +1 for 0-index, +1 for header
+
+            # Adjust for possible trailing delimiter on the data line
+            if line.endswith('|'):
+                current_delimiters -= 1
+
+            if current_delimiters != expected_delimiters:
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                print("!!!           PROBLEM FOUND                 !!!")
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+                print(f"Mismatch found on line number: {line_number_in_file}")
+                print(f"Expected delimiter count: {expected_delimiters}")
+                print(f"This line has:            {current_delimiters}\n")
+                print("--- Details of Problematic Line ---")
+                print(f"Line Content: {repr(line)}\n")
+                print("This is the exact point of failure. The content above shows hidden characters.")
+                print("Please copy this entire output and paste it in your reply.")
+                return # Stop after the first error
+
+        # If the loop completes without returning, the file is structurally sound.
+        print("--- SUCCESS ---")
+        print("Scanned the ENTIRE file and found NO delimiter count mismatches.")
+        print("This is extremely unusual. If the record counts are still wrong, the issue might be outside the file itself (e.g., a memory issue or a very obscure library bug).")
 
     except Exception as e:
-        print(f"--- FATAL ERROR opening or reading file: {e} ---")
-
+        print(f"--- FATAL ERROR during diagnosis: {e} ---")
 
 if __name__ == "__main__":
-    # --- Define the filenames to check ---
-    # If your files have different names, change them here.
-    tbl_file = '1099MTbl.dat'
-    tran_file = '1099MTran.dat'
+    # --- Define the filenames and expected column counts ---
+    files_to_check = {
+        '1099MTran.dat': 15,
+        '1099MTbl.dat': 7
+    }
 
-    # --- Run diagnostics on both files ---
-    diagnose(tran_file)
-    print("\n" + "="*50 + "\n")
-    diagnose(tbl_file)
-
-    # Keep the window open so the user can copy the text
-    input("\n--- Diagnosis complete. Please copy all the text above and paste it in your reply. Press Enter to exit. ---")
+    for filename, col_count in files_to_check.items():
+        find_first_bad_line(filename, col_count)
+        print("\n" + "="*50 + "\n")
+    
+    input("\n--- Diagnosis complete. Press Enter to exit. ---")
