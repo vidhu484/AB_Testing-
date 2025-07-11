@@ -1,55 +1,61 @@
-import pandas as pd
+# diagnose_file.py
+import os
 
-# Load the Excel file
-file_path = 'your_file_path.xlsx'  # replace with the actual file path
-df = pd.read_excel(file_path)
+def diagnose(file_path, num_lines=20):
+    """
+    Reads the first few lines of a file in binary mode to diagnose its structure.
+    This helps identify issues with encoding, delimiters, and line endings.
+    """
+    if not os.path.exists(file_path):
+        print(f"--- ERROR: File not found at '{file_path}'")
+        return
 
-# Ensure 'CIF' and 'ID' are strings and pad them with leading zeroes
-df['CIF'] = df['CIF'].astype(str).str.zfill(10)
-df['ID'] = df['ID'].astype(str).str.zfill(15)
+    print(f"--- Diagnosing file: {os.path.basename(file_path)} ---")
+    print(f"--- Reading first {num_lines} lines ---\n")
 
-# Group by CIF and assign row numbers for each ID within the same CIF
-df['row_number'] = df.groupby('CIF').cumcount() + 1
+    try:
+        with open(file_path, 'rb') as f: # 'rb' = Read as Binary
+            for i in range(num_lines):
+                try:
+                    raw_line_bytes = f.readline()
+                    if not raw_line_bytes:
+                        print("\n--- End of file reached. ---")
+                        break
 
-# Function to reshape the data properly for each CIF
-def reshape_data(df, max_ids=16):
-    # Create an empty list to store the results
-    final_data = []
+                    # 1. Show the raw bytes as Python sees them.
+                    #    Look for \r\n (Windows), \n (Unix), or something else.
+                    print(f"Line {i+1}:")
+                    print(f"  Raw Bytes: {repr(raw_line_bytes)}")
 
-    # Group the data by CIF
-    grouped = df.groupby('CIF')
+                    # 2. Try to decode it as a string (using a robust encoding)
+                    #    and see how many fields it splits into.
+                    try:
+                        # We use 'latin1' because it never fails, it just maps every byte.
+                        # This helps us see what the text looks like.
+                        decoded_line = raw_line_bytes.decode('latin1')
+                        parts = decoded_line.strip().split('|')
+                        print(f"  Split Count (using '|'): {len(parts)} parts")
+                        # print(f"  Parts: {parts}") # Uncomment for very detailed view
+                    except Exception as e:
+                        print(f"  Could not decode or split line. Error: {e}")
 
-    # Iterate over each group (each CIF)
-    for cif, group in grouped:
-        # Initialize a dictionary to hold the data for this CIF
-        cif_data = {'CIF': cif}
+                    print("-" * 20)
 
-        # Iterate over the IDs and corresponding amounts in this group
-        for i, row in group.iterrows():
-            row_num = row['row_number']
-            cif_data[f'ID_{str(row_num).zfill(2)}'] = row['ID']
-            cif_data[f'Amt_Old_{str(row_num).zfill(2)}'] = row['Amt_Old']
-            cif_data[f'Amt_New_{str(row_num).zfill(2)}'] = row['Amt_New']
-        
-        # If this CIF has fewer than max_ids, pad with empty values
-        for j in range(len(group) + 1, max_ids + 1):
-            cif_data[f'ID_{str(j).zfill(2)}'] = None
-            cif_data[f'Amt_Old_{str(j).zfill(2)}'] = None
-            cif_data[f'Amt_New_{str(j).zfill(2)}'] = None
-        
-        # Append the result for this CIF to the final data list
-        final_data.append(cif_data)
+                except Exception as line_error:
+                    print(f"Error reading line {i+1}: {line_error}")
+                    break
 
-    # Convert the list of dictionaries into a DataFrame
-    final_df = pd.DataFrame(final_data)
+    except Exception as e:
+        print(f"--- FATAL ERROR opening or reading file: {e} ---")
 
-    return final_df
-
-# Process the data and reshape it with up to 16 IDs per CIF
-pivoted_df = reshape_data(df, max_ids=16)
-
-# Save the result to a new Excel file
-pivoted_df.to_excel('pivoted_data_corrected.xlsx', index=False)
-
-print("Pivoted data saved to 'pivoted_data_corrected.xlsx'")
-
+if __name__ == "__main__":
+    try:
+        # Prompt the user for the file path
+        print("Please enter the full path to the problematic .dat file (e.g., 1099MTran):")
+        path = input("> ")
+        diagnose(path)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        # Keep the window open so the user can copy the text
+        input("\n--- Diagnosis complete. Press Enter to exit. ---")
