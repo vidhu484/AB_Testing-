@@ -5,8 +5,9 @@ from pandasql import sqldf
 import os
 from datetime import datetime
 
-# --- Standard Column Names AND their expected counts ---
-# The app will now identify files by their column count.
+# --- The OFFICIAL Internal Schema ---
+# The application will FORCE all loaded data to conform to this structure.
+# This makes the SQL queries reliable, regardless of the input file's headers.
 TBL_SCHEMA = {
     'name': '1099MTbl',
     'cols': [
@@ -26,26 +27,35 @@ TRAN_SCHEMA = {
     'count': 15
 }
 
-def load_and_identify_file(file_path):
+def load_dat_file_sanitized(file_path, log_func):
     """
-    The most robust parser. Reads a file and returns the DataFrame AND its column count.
-    This allows for intelligent identification of the file's type.
+    The definitive parser. Reads raw bytes, removes null characters,
+    skips the original header, and processes only the data rows.
     """
+    log_func(f"-> Starting SANITIZED load for {os.path.basename(file_path)}...")
     try:
-        with open(file_path, 'r', encoding='latin1') as f:
-            content = f.read()
-        lines = content.splitlines()
+        with open(file_path, 'rb') as f:
+            raw_content = f.read()
 
-        if not lines:
-            raise ValueError("File is empty.")
+        sanitized_content_bytes = raw_content.replace(b'\x00', b'')
+        
+        if len(sanitized_content_bytes) < len(raw_content):
+            log_func(f"  -> Found and removed null bytes from {os.path.basename(file_path)}.")
 
-        header = lines[0]
+        decoded_content = sanitized_content_bytes.decode('latin1')
+        lines = decoded_content.splitlines()
+
+        # DISCARD the original header, we only care about data
         data_rows = lines[1:]
         
-        # Determine the number of fields from the header
-        num_fields = len(header.split('|'))
-        if header.endswith('|'):
-            num_fields -= 1
+        if not data_rows:
+            raise ValueError("File contains no data rows after the header.")
+
+        # Determine expected field count from the header to validate rows
+        header_line = lines[0]
+        num_fields_expected = len(header_line.split('|'))
+        if header_line.endswith('|'):
+            num_fields_expected -= 1
 
         parsed_data = []
         for line in data_rows:
@@ -53,13 +63,9 @@ def load_and_identify_file(file_path):
                 fields = line.split('|')
                 if fields and fields[-1] == '':
                     fields.pop()
-                # We only append if the row has a consistent number of fields
-                if len(fields) == num_fields:
+                if len(fields) == num_fields_expected:
                     parsed_data.append(fields)
         
-        if not parsed_data:
-            raise ValueError("No valid data rows found.")
-
         df = pd.DataFrame(parsed_data, dtype=str)
         return df, len(df.columns)
 
@@ -92,7 +98,6 @@ class DataProcessorApp:
     def create_widgets(self):
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.pack(fill=tk.BOTH, expand=True)
-        # --- File Selection (Now just visual guides) ---
         file_frame = ttk.LabelFrame(main_frame, text="Step 1: Upload Both Input Files", padding="10")
         file_frame.pack(fill=tk.X, padx=5, pady=5)
         file_frame.grid_columnconfigure(1, weight=1)
@@ -102,7 +107,6 @@ class DataProcessorApp:
         ttk.Label(file_frame, text="File 2 (e.g., 1099MTran):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
         ttk.Entry(file_frame, textvariable=self.tran_file_path, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky=tk.EW)
         ttk.Button(file_frame, text="Browse...", command=lambda: self.browse_file(self.tran_file_path)).grid(row=1, column=2, padx=5, pady=5)
-        
         load_frame = ttk.LabelFrame(main_frame, text="Step 2: Load and Transform Data", padding="10")
         load_frame.pack(fill=tk.X, padx=5, pady=5)
         self.load_button = ttk.Button(load_frame, text="Load & Transform Files", command=self.run_load_and_transform)
@@ -137,15 +141,13 @@ class DataProcessorApp:
 
         try:
             self.log_message("--- Starting Intelligent Loading Process ---")
-            df1, count1 = load_and_identify_file(self.tbl_file_path.get())
+            df1, count1 = load_dat_file_sanitized(self.tbl_file_path.get(), self.log_message)
             self.log_message(f"-> File 1 ({os.path.basename(self.tbl_file_path.get())}) has {count1} columns and {len(df1)} records.")
             
-            df2, count2 = load_and_identify_file(self.tran_file_path.get())
+            df2, count2 = load_dat_file_sanitized(self.tran_file_path.get(), self.log_message)
             self.log_message(f"-> File 2 ({os.path.basename(self.tran_file_path.get())}) has {count2} columns and {len(df2)} records.")
 
-            # --- Auto-Swap and Validation Logic ---
             if count1 == TBL_SCHEMA['count'] and count2 == TRAN_SCHEMA['count']:
-                self.log_message("-> Files identified correctly. Assigning...")
                 self.df_1099MTbl = df1
                 self.df_1099MTran = df2
             elif count1 == TRAN_SCHEMA['count'] and count2 == TBL_SCHEMA['count']:
@@ -155,14 +157,13 @@ class DataProcessorApp:
             else:
                 raise ValueError(f"File column counts are incorrect. Please provide one file with {TBL_SCHEMA['count']} columns and one with {TRAN_SCHEMA['count']} columns.")
 
-            # Assign standard column names
+            # THE KEY STEP: Forcefully assign our standard, SQL-friendly column names
             self.df_1099MTbl.columns = TBL_SCHEMA['cols']
             self.df_1099MTran.columns = TRAN_SCHEMA['cols']
-            self.log_message("-> Column names have been standardized.")
+            self.log_message("-> Column names have been forcefully standardized.")
 
-            # --- Apply Transformations ---
+            # Apply Transformations
             self.log_message("Applying data transformations...")
-            # (Transformation logic is the same)
             self.df_1099MTbl['Date_of_Transaction'] = pd.to_datetime(self.df_1099MTbl['Date_of_Transaction'], errors='coerce').dt.strftime('%m/%d/%Y')
             for col in ['Value_Date', 'Tran_Date']: self.df_1099MTran[col] = pd.to_datetime(self.df_1099MTran[col], errors='coerce').dt.strftime('%m/%d/%Y')
             self.df_1099MTbl['Borrower_CIF'] = self.df_1099MTbl['Borrower_CIF'].str.strip().str.zfill(10)
@@ -172,7 +173,6 @@ class DataProcessorApp:
             self.df_1099MTran['Loan_Number'] = self.df_1099MTran['Loan_Number'].str.strip().str.zfill(15)
             self.log_message("-> Transformations complete.")
             
-            # Enable next steps
             self.validate_button.config(state=tk.NORMAL)
             self.process_button.config(state=tk.NORMAL)
             self.log_message(f"--- SUCCESS: Data is ready. 1099MTbl: {len(self.df_1099MTbl)} records. 1099MTran: {len(self.df_1099MTran)} records. ---")
@@ -182,10 +182,9 @@ class DataProcessorApp:
             self.log_message(f"CRITICAL ERROR: {e}")
             self.validate_button.config(state=tk.DISABLED)
             self.process_button.config(state=tk.DISABLED)
-            return
 
-    # The rest of the functions (save, execute_sql, run_sql_processing) are unchanged.
     def save_tran_for_validation(self):
+        # (This function is unchanged)
         self.log_message("--- Validation Step: Saving transformed 1099MTran data ---")
         if self.df_1099MTran is None or self.df_1099MTran.empty:
             messagebox.showwarning("No Data", "1099MTran data is not available to save.")
@@ -201,6 +200,7 @@ class DataProcessorApp:
             messagebox.showerror("Save Error", f"Failed to save the validation file.\n\nError: {e}")
 
     def execute_sql(self, query, query_name, tables):
+        # (This function is unchanged)
         self.log_message(f"Executing {query_name}...")
         try:
             pysqldf = lambda q: sqldf(q, tables)
@@ -214,6 +214,7 @@ class DataProcessorApp:
             return None
 
     def save_final_report(self, df):
+        # (This function is unchanged)
         self.log_message("Saving final report to Excel...")
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -226,21 +227,48 @@ class DataProcessorApp:
             messagebox.showerror("Save Error", f"Failed to save the Excel file.\n\nError: {e}")
             
     def run_sql_processing(self):
+        # The SQL queries now work because the DataFrame columns match EXACTLY.
         if self.df_1099MTran is None or self.df_1099MTbl is None:
             messagebox.showerror("Error", "Data is not loaded. Please use the 'Load & Transform Files' button first.")
             return
-        QUERY_1_SQL = """SELECT t1.*, t2."1099_Type", t2."1099_Amt" FROM df_1099MTran t1 LEFT JOIN df_1099MTbl t2 ON t1.ACID = t2.ACID;"""
+        
+        # NOTE: All column names in SQL must use the underscore format defined in the schemas.
+        # Using double quotes is the safest way to ensure they work.
+        QUERY_1_SQL = """
+            SELECT 
+                t1.*, 
+                t2."1099_Type", 
+                t2."1099_Amt" 
+            FROM 
+                df_1099MTran t1 
+            LEFT JOIN 
+                df_1099MTbl t2 ON t1.ACID = t2.ACID;
+        """
         tables_for_query1 = {'df_1099MTbl': self.df_1099MTbl, 'df_1099MTran': self.df_1099MTran}
         intermediate_df = self.execute_sql(QUERY_1_SQL, "Intermediate Query (Query 1)", tables_for_query1)
         if intermediate_df is None or intermediate_df.empty:
             messagebox.showwarning("No Results", "The first query produced no data.")
             return
-        QUERY_2_SQL = """SELECT Loan_Number, Borrower_CIF, Tran_Date, Tran_Description, "1099_Type", "1099_Amt" FROM intermediate_df WHERE "1099_Type" = 'INT' AND "1099_Amt" IS NOT NULL;"""
+            
+        QUERY_2_SQL = """
+            SELECT 
+                "Loan_Number", 
+                "Borrower_CIF", 
+                "Tran_Date", 
+                "Tran_Description", 
+                "1099_Type", 
+                "1099_Amt" 
+            FROM 
+                intermediate_df 
+            WHERE 
+                "1099_Type" = 'INT' AND "1099_Amt" IS NOT NULL;
+        """
         tables_for_query2 = {'intermediate_df': intermediate_df}
         final_report_df = self.execute_sql(QUERY_2_SQL, "Final Report Query (Query 2)", tables_for_query2)
         if final_report_df is None or final_report_df.empty:
             messagebox.showwarning("No Results", "The final query produced no data to save.")
             return
+            
         self.save_final_report(final_report_df)
 
 if __name__ == "__main__":
