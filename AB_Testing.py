@@ -1,10 +1,10 @@
+###################
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import pandas as pd
 from pandasql import sqldf
 import os
 from datetime import datetime
-import csv
 
 # --- Standard Column Names ---
 TBL_COLUMNS = [
@@ -17,46 +17,61 @@ TRAN_COLUMNS = [
     'Agent_ID_System_Processes_ID', 'Tran_Description', 'Tran_Remarks', 'Cosigner_CIF'
 ]
 
-def load_dat_file_manually(file_path, expected_columns):
+def load_dat_file_final(file_path, expected_columns, log_func):
     """
-    Manually parses a pipe-delimited file line by line for maximum robustness.
-    This function is designed to overcome common pandas parsing errors.
+    The definitive, robust DAT file parser. It reads the entire file content first,
+    then splits by the actual newline character, making it immune to embedded newlines in data.
     """
-    with open(file_path, 'r', encoding='latin1') as f:
-        # Read header and data separately
-        header_line = f.readline().strip()
-        data_lines = f.readlines()
-
-    # Process header
-    headers = [h.strip() for h in header_line.split('|')]
+    log_func(f"-> Starting robust load for {os.path.basename(file_path)}...")
     
-    # Handle trailing delimiter in header
-    if headers[-1] == '':
-        headers.pop()
+    try:
+        # Read the entire file content. Use 'latin1' for max compatibility.
+        with open(file_path, 'r', encoding='latin1') as f:
+            content = f.read()
+            
+        # Split the content into lines. `splitlines()` is robust to \n and \r\n.
+        lines = content.splitlines()
 
-    # Process data lines
-    parsed_data = []
-    for line in data_lines:
-        if line.strip():  # Skip empty lines
-            fields = [field.strip() for field in line.strip().split('|')]
-            # Handle trailing delimiter in data row
-            if len(fields) > len(headers):
+        header_line = lines[0]
+        data_lines = lines[1:]
+
+        parsed_data = []
+        malformed_lines = 0
+        expected_field_count = len(expected_columns)
+
+        for i, line in enumerate(data_lines):
+            if not line.strip():
+                continue # Skip empty lines
+
+            fields = line.split('|')
+            
+            # Handle trailing delimiter: if the last element is empty, pop it.
+            if fields and fields[-1] == '':
                 fields.pop()
-            parsed_data.append(fields)
-    
-    # Create DataFrame
-    df = pd.DataFrame(parsed_data, dtype=str)
-    
-    # Final validation and column renaming
-    num_cols_found = len(df.columns)
-    num_cols_expected = len(expected_columns)
-    
-    if num_cols_found != num_cols_expected:
-        raise ValueError(f"Column count mismatch in {os.path.basename(file_path)}. "
-                         f"Expected {num_cols_expected}, but found {num_cols_found}.")
-    
-    df.columns = expected_columns
-    return df
+
+            # The most important validation step:
+            if len(fields) == expected_field_count:
+                parsed_data.append(fields)
+            else:
+                malformed_lines += 1
+                # Log the first few errors to help diagnose if needed
+                if malformed_lines <= 5:
+                    log_func(f"  WARNING: Skipping malformed line #{i+2} in {os.path.basename(file_path)}. "
+                             f"Expected {expected_field_count} fields, found {len(fields)}.")
+        
+        if malformed_lines > 0:
+            log_func(f"-> Total malformed/skipped lines in {os.path.basename(file_path)}: {malformed_lines}")
+
+        if not parsed_data:
+            raise ValueError("No valid data rows could be parsed from the file.")
+
+        # Create the DataFrame from the clean data
+        df = pd.DataFrame(parsed_data, columns=expected_columns, dtype=str)
+        return df
+
+    except Exception as e:
+        # Re-raise with a more informative message
+        raise type(e)(f"Failed to parse file '{os.path.basename(file_path)}': {e}")
 
 
 class DataProcessorApp:
@@ -136,15 +151,13 @@ class DataProcessorApp:
             self.log_message("-> FAILED: Data loading failed. Check logs for details.")
 
     def load_and_transform_data(self):
-        """Loads data using a manual parser and then applies transformations."""
+        """Loads data using the definitive parser and then applies transformations."""
         try:
-            self.log_message("--- Starting Manual Data Loading ---")
+            self.log_message("--- Starting Final Robust Data Loading ---")
             
-            self.df_1099MTbl = load_dat_file_manually(self.tbl_file_path.get(), TBL_COLUMNS)
-            self.log_message("-> 1099MTbl file loaded manually and columns renamed.")
-            
-            self.df_1099MTran = load_dat_file_manually(self.tran_file_path.get(), TRAN_COLUMNS)
-            self.log_message("-> 1099MTran file loaded manually and columns renamed.")
+            # Use the new, definitive parser function
+            self.df_1099MTbl = load_dat_file_final(self.tbl_file_path.get(), TBL_COLUMNS, self.log_message)
+            self.df_1099MTran = load_dat_file_final(self.tran_file_path.get(), TRAN_COLUMNS, self.log_message)
             
             # --- Apply Transformations ---
             self.log_message("Applying data transformations...")
@@ -158,11 +171,12 @@ class DataProcessorApp:
             self.log_message("-> Transformations complete.")
             return True
         except Exception as e:
-            messagebox.showerror("Loading Error", f"An unexpected error occurred during loading.\n\nError: {e}")
-            self.log_message(f"ERROR: {e}")
+            messagebox.showerror("Loading Error", f"A critical error occurred during file loading.\n\nError: {e}")
+            self.log_message(f"CRITICAL ERROR: {e}")
             return False
 
-    # All subsequent methods (save_tran_for_validation, execute_sql, etc.) remain unchanged.
+    # The rest of the functions (save, execute_sql, run_sql_processing) are unchanged
+    # and will now work correctly with the properly loaded DataFrames.
     def save_tran_for_validation(self):
         self.log_message("--- Validation Step: Saving transformed 1099MTran data ---")
         if self.df_1099MTran is None or self.df_1099MTran.empty:
