@@ -4,7 +4,7 @@ import pandas as pd
 from pandasql import sqldf
 import os
 
-# Define the column names as constants for easy management
+# --- Constants for column names for clarity and easy maintenance ---
 TBL_COLUMNS = [
     'ACID', '1099_Type', '1099_Amt', '1099_Source', 'Date_of_Transaction', 
     'Borrower_CIF', 'Cosigner_CIF'
@@ -21,27 +21,23 @@ class DataProcessorApp:
         """Initialize the application."""
         self.root = root
         self.root.title("1099 Data Processing Tool")
-        self.root.geometry("800x600")
+        self.root.geometry("800x650")
 
-        # Style configuration
         self.style = ttk.Style(self.root)
-        self.style.theme_use("clam") # You can try other themes like 'alt', 'default', 'classic'
+        self.style.theme_use("clam")
 
-        # File paths
         self.tbl_file_path = tk.StringVar()
         self.tran_file_path = tk.StringVar()
-
-        # DataFrames
         self.df_1099MTbl = None
         self.df_1099MTran = None
 
         self.create_widgets()
 
     def log_message(self, message):
-        """Adds a message to the status log."""
+        """Adds a message to the status log text widget."""
         self.status_log.config(state=tk.NORMAL)
         self.status_log.insert(tk.END, message + "\n")
-        self.status_log.see(tk.END) # Scroll to the end
+        self.status_log.see(tk.END)
         self.status_log.config(state=tk.DISABLED)
         self.root.update_idletasks()
 
@@ -50,45 +46,34 @@ class DataProcessorApp:
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.pack(fill=tk.BOTH, expand=True)
 
-        # --- File Selection Frame ---
+        # Frame for File Selection
         file_frame = ttk.LabelFrame(main_frame, text="Step 1: Upload Input Files", padding="10")
         file_frame.pack(fill=tk.X, padx=5, pady=5)
         file_frame.grid_columnconfigure(1, weight=1)
-
-        # 1099MTbl file
         ttk.Label(file_frame, text="1099MTbl File (.dat):").grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         ttk.Entry(file_frame, textvariable=self.tbl_file_path, state="readonly").grid(row=0, column=1, padx=5, pady=5, sticky=tk.EW)
         ttk.Button(file_frame, text="Browse...", command=self.browse_tbl_file).grid(row=0, column=2, padx=5, pady=5)
-
-        # 1099MTran file
         ttk.Label(file_frame, text="1099MTran File (.dat):").grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
         ttk.Entry(file_frame, textvariable=self.tran_file_path, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky=tk.EW)
         ttk.Button(file_frame, text="Browse...", command=self.browse_tran_file).grid(row=1, column=2, padx=5, pady=5)
 
-        # --- Processing Frame ---
+        # Frame for the Main Action Button
         process_frame = ttk.LabelFrame(main_frame, text="Step 2: Process Data", padding="10")
         process_frame.pack(fill=tk.X, padx=5, pady=10)
-
-        process_button = ttk.Button(process_frame, text="Process Files and Generate Report", command=self.process_data)
+        process_button = ttk.Button(process_frame, text="Process Files and Generate Final Report", command=self.process_data)
         process_button.pack(pady=10, padx=20, fill=tk.X)
 
-        # --- Status Log Frame ---
+        # Frame for the Status Log
         status_frame = ttk.LabelFrame(main_frame, text="Status Log", padding="10")
         status_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        self.status_log = tk.Text(status_frame, height=15, state=tk.DISABLED, wrap=tk.WORD, bg="#f0f0f0")
+        self.status_log = tk.Text(status_frame, height=15, state=tk.DISABLED, wrap=tk.WORD, bg="#f0f0f0", relief=tk.SOLID, borderwidth=1)
         scrollbar = ttk.Scrollbar(status_frame, command=self.status_log.yview)
         self.status_log.config(yscrollcommand=scrollbar.set)
-        
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.status_log.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def browse_file(self, path_var, title):
-        """Opens a file dialog to select a .dat file."""
-        file_path = filedialog.askopenfilename(
-            title=title,
-            filetypes=(("Data Files", "*.dat"), ("All files", "*.*"))
-        )
+        file_path = filedialog.askopenfilename(title=f"Select {title} File", filetypes=(("Data Files", "*.dat"), ("All files", "*.*")))
         if file_path:
             path_var.set(file_path)
             self.log_message(f"Selected {os.path.basename(file_path)} for {title}")
@@ -100,152 +85,135 @@ class DataProcessorApp:
         self.browse_file(self.tran_file_path, "1099MTran")
 
     def load_and_transform_data(self):
-        """Loads data from files and applies necessary transformations."""
+        """Loads data from files and applies transformations."""
         try:
-            self.log_message("Loading 1099MTbl file...")
-            self.df_1099MTbl = pd.read_csv(
-                self.tbl_file_path.get(),
-                sep='|',
-                header=None,
-                names=TBL_COLUMNS,
-                dtype=str # Load all as string to preserve leading zeros
-            )
-            self.log_message(f"-> Success: Loaded {len(self.df_1099MTbl)} rows into 1099MTbl DataFrame.")
-
-            self.log_message("Loading 1099MTran file...")
-            self.df_1099MTran = pd.read_csv(
-                self.tran_file_path.get(),
-                sep='|',
-                header=None,
-                names=TRAN_COLUMNS,
-                dtype=str # Load all as string
-            )
-            self.log_message(f"-> Success: Loaded {len(self.df_1099MTran)} rows into 1099MTran DataFrame.")
-            
-            # --- Data Transformation ---
+            self.log_message("--- Starting Data Loading and Transformation ---")
+            self.df_1099MTbl = pd.read_csv(self.tbl_file_path.get(), sep='|', header=None, names=TBL_COLUMNS, dtype=str, skipinitialspace=True)
+            self.log_message(f"-> Loaded {len(self.df_1099MTbl)} rows from 1099MTbl.")
+            self.df_1099MTran = pd.read_csv(self.tran_file_path.get(), sep='|', header=None, names=TRAN_COLUMNS, dtype=str, skipinitialspace=True)
+            self.log_message(f"-> Loaded {len(self.df_1099MTran)} rows from 1099MTran.")
             self.log_message("Applying data transformations...")
-
-            # Format dates (mm/dd/yyyy)
-            date_cols_tbl = ['Date_of_Transaction']
-            for col in date_cols_tbl:
+            for col in ['Date_of_Transaction']:
                 self.df_1099MTbl[col] = pd.to_datetime(self.df_1099MTbl[col], errors='coerce').dt.strftime('%m/%d/%Y')
-            
-            date_cols_tran = ['Value_Date', 'Tran_Date']
-            for col in date_cols_tran:
+            for col in ['Value_Date', 'Tran_Date']:
                 self.df_1099MTran[col] = pd.to_datetime(self.df_1099MTran[col], errors='coerce').dt.strftime('%m/%d/%Y')
-            
-            self.log_message("-> Dates formatted to MM/DD/YYYY.")
-
-            # Pad with leading zeros
-            self.df_1099MTbl['Borrower_CIF'] = self.df_1099MTbl['Borrower_CIF'].str.zfill(10)
-            self.df_1099MTbl['Cosigner_CIF'] = self.df_1099MTbl['Cosigner_CIF'].str.zfill(10)
-            
-            self.df_1099MTran['Borrower_CIF'] = self.df_1099MTran['Borrower_CIF'].str.zfill(10)
-            self.df_1099MTran['Cosigner_CIF'] = self.df_1099MTran['Cosigner_CIF'].str.zfill(10)
-            self.df_1099MTran['Loan_Number'] = self.df_1099MTran['Loan_Number'].str.zfill(15)
-            
-            self.log_message("-> Padded CIF and Loan_Number columns with leading zeros.")
-            self.log_message("Transformation complete.")
+            self.df_1099MTbl['Borrower_CIF'] = self.df_1099MTbl['Borrower_CIF'].str.strip().str.zfill(10)
+            self.df_1099MTbl['Cosigner_CIF'] = self.df_1099MTbl['Cosigner_CIF'].str.strip().str.zfill(10)
+            self.df_1099MTran['Borrower_CIF'] = self.df_1099MTran['Borrower_CIF'].str.strip().str.zfill(10)
+            self.df_1099MTran['Cosigner_CIF'] = self.df_1099MTran['Cosigner_CIF'].str.strip().str.zfill(10)
+            self.df_1099MTran['Loan_Number'] = self.df_1099MTran['Loan_Number'].str.strip().str.zfill(15)
+            self.log_message("-> Transformations complete.")
             return True
-
         except Exception as e:
             messagebox.showerror("Loading Error", f"Failed to load or transform files.\n\nError: {e}")
             self.log_message(f"ERROR: {e}")
             return False
 
-    def execute_sql_query(self):
-        """Executes the SQL query on the loaded DataFrames."""
-        self.log_message("Executing SQL query...")
-        
-        # Make DataFrames available to pandasql
-        df_1099MTbl = self.df_1099MTbl
-        df_1099MTran = self.df_1099MTran
-
-        # ===================================================================
-        # TODO: REPLACE THIS WITH YOUR ACTUAL PSQL QUERY
-        #
-        # This is a sample query that joins the two tables on ACID and CIF.
-        # You will replace the content of this `query` variable with your own.
-        # ===================================================================
-        query = """
-        SELECT
-            t1.ACID,
-            t1."1099_Type",
-            t1."1099_Amt",
-            t2.Loan_Number,
-            t2.Tran_Date,
-            t2.Tran_Description,
-            t1.Borrower_CIF,
-            t1.Cosigner_CIF
-        FROM
-            df_1099MTbl t1
-        JOIN
-            df_1099MTran t2 ON t1.ACID = t2.ACID AND t1.Borrower_CIF = t2.Borrower_CIF
-        WHERE
-            t1."1099_Type" = 'INT' -- Example filter
-        ORDER BY
-            t2.Tran_Date;
-        """
-        
+    def execute_sql(self, query, query_name, tables):
+        """Executes a SQL query against a dictionary of DataFrames."""
+        self.log_message(f"Executing {query_name}...")
         try:
-            # The sqldf function requires a function wrapper to access local variables
-            pysqldf = lambda q: sqldf(q, locals())
+            # The 'tables' dictionary provides the scope for pandasql
+            pysqldf = lambda q: sqldf(q, tables)
             result_df = pysqldf(query)
-            
-            self.log_message(f"-> Success: Query executed, {len(result_df)} rows in result set.")
+            self.log_message(f"-> Success: {query_name} returned {len(result_df)} rows.")
             return result_df
-            
         except Exception as e:
-            messagebox.showerror("SQL Query Error", f"The SQL query failed to execute.\n\nError: {e}")
-            self.log_message(f"ERROR executing SQL: {e}")
+            messagebox.showerror("SQL Query Error", f"The query '{query_name}' failed.\n\nError: {e}")
+            self.log_message(f"ERROR executing {query_name}: {e}")
             return None
 
-    def save_to_excel(self, df):
-        """Saves the final DataFrame to an Excel file."""
-        self.log_message("Saving results to Excel...")
-        
+    def save_final_report(self, df):
+        """Saves a single DataFrame to an Excel file."""
+        self.log_message("Saving final report to Excel...")
         save_path = filedialog.asksaveasfilename(
-            title="Save Report As",
+            title="Save Final Report As",
             defaultextension=".xlsx",
             filetypes=(("Excel Files", "*.xlsx"), ("All files", "*.*"))
         )
-        
         if not save_path:
             self.log_message("Save operation cancelled by user.")
             return
 
         try:
-            df.to_excel(save_path, index=False)
-            self.log_message(f"SUCCESS! Report saved to:\n{save_path}")
+            df.to_excel(save_path, index=False, sheet_name="Final_Report")
+            self.log_message(f"--- SUCCESS! Report saved to: {save_path} ---")
             messagebox.showinfo("Success", f"Report successfully generated and saved to\n{save_path}")
         except Exception as e:
             messagebox.showerror("Save Error", f"Failed to save the Excel file.\n\nError: {e}")
             self.log_message(f"ERROR saving Excel file: {e}")
 
     def process_data(self):
-        """Main function to orchestrate the entire data processing workflow."""
+        """Orchestrates the two-step query process and saves the final result."""
         # 1. Validate inputs
         if not self.tbl_file_path.get() or not self.tran_file_path.get():
-            messagebox.showerror("Input Error", "Please select both 1099MTbl and 1099MTran files.")
+            messagebox.showerror("Input Error", "Please select both input files.")
             return
 
         # 2. Load and Transform Data
         if not self.load_and_transform_data():
-            return # Stop if loading failed
-
-        # 3. Execute SQL Query
-        final_df = self.execute_sql_query()
-        if final_df is None:
-            return # Stop if query failed
-
-        if final_df.empty:
-            self.log_message("WARNING: The query produced no results. Nothing to save.")
-            messagebox.showwarning("No Results", "The query executed successfully but produced no results.")
             return
 
-        # 4. Save to Excel
-        self.save_to_excel(final_df)
+        # =================================================================================
+        # ===> STEP 1: DEFINE YOUR INTERMEDIATE QUERY (QUERY 1) <===
+        # This query runs on the initial DataFrames: 'df_1099MTbl' and 'df_1099MTran'
+        # =================================================================================
+        QUERY_1_SQL = """
+            -- Example: Join the two tables
+            SELECT
+                t1.*, -- Select all columns from the transaction table
+                t2."1099_Type",
+                t2."1099_Amt"
+            FROM
+                df_1099MTran t1
+            LEFT JOIN
+                df_1099MTbl t2 ON t1.ACID = t2.ACID;
+        """
 
+        # Execute Query 1
+        tables_for_query1 = {
+            'df_1099MTbl': self.df_1099MTbl,
+            'df_1099MTran': self.df_1099MTran
+        }
+        intermediate_df = self.execute_sql(QUERY_1_SQL, "Intermediate Query (Query 1)", tables_for_query1)
+
+        # Stop if the first query failed or returned no results
+        if intermediate_df is None or intermediate_df.empty:
+            self.log_message("WARNING: Intermediate query (Query 1) produced no results. Processing stopped.")
+            messagebox.showwarning("No Results", "The first query produced no data, so the final report cannot be generated.")
+            return
+
+        # =================================================================================
+        # ===> STEP 2: DEFINE YOUR FINAL REPORT QUERY (QUERY 2) <===
+        # This query runs on the result of Query 1. The table name MUST be 'intermediate_df'.
+        # =================================================================================
+        QUERY_2_SQL = """
+            -- Example: Filter the intermediate result for specific criteria
+            SELECT
+                Loan_Number,
+                Borrower_CIF,
+                Tran_Date,
+                Tran_Description,
+                "1099_Type",
+                "1099_Amt"
+            FROM
+                intermediate_df
+            WHERE
+                "1099_Type" = 'INT' AND "1099_Amt" IS NOT NULL;
+        """
+        
+        # Execute Query 2
+        tables_for_query2 = {'intermediate_df': intermediate_df}
+        final_report_df = self.execute_sql(QUERY_2_SQL, "Final Report Query (Query 2)", tables_for_query2)
+
+        # Stop if the final query failed or returned no results
+        if final_report_df is None or final_report_df.empty:
+            self.log_message("WARNING: Final report query (Query 2) produced no results. Nothing to save.")
+            messagebox.showwarning("No Results", "The final query produced no data to save.")
+            return
+            
+        # 4. Save the final report (result of Query 2)
+        self.save_final_report(final_report_df)
 
 if __name__ == "__main__":
     root = tk.Tk()
