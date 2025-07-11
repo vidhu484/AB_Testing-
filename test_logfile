@@ -1,4 +1,4 @@
-# diagnose_file.py
+# diagnose_local_files.py
 import os
 
 def diagnose(file_path, num_lines=20):
@@ -7,55 +7,52 @@ def diagnose(file_path, num_lines=20):
     This helps identify issues with encoding, delimiters, and line endings.
     """
     if not os.path.exists(file_path):
-        print(f"--- ERROR: File not found at '{file_path}'")
+        print(f"--- ERROR: File not found at '{file_path}' ---")
+        print("--- Please make sure this script is in the same folder as your .dat file. ---")
         return
 
     print(f"--- Diagnosing file: {os.path.basename(file_path)} ---")
     print(f"--- Reading first {num_lines} lines ---\n")
 
     try:
-        with open(file_path, 'rb') as f: # 'rb' = Read as Binary
+        # 'rb' = Read as Binary. This is crucial for seeing the true byte structure.
+        with open(file_path, 'rb') as f:
             for i in range(num_lines):
-                try:
-                    raw_line_bytes = f.readline()
-                    if not raw_line_bytes:
-                        print("\n--- End of file reached. ---")
-                        break
-
-                    # 1. Show the raw bytes as Python sees them.
-                    #    Look for \r\n (Windows), \n (Unix), or something else.
-                    print(f"Line {i+1}:")
-                    print(f"  Raw Bytes: {repr(raw_line_bytes)}")
-
-                    # 2. Try to decode it as a string (using a robust encoding)
-                    #    and see how many fields it splits into.
-                    try:
-                        # We use 'latin1' because it never fails, it just maps every byte.
-                        # This helps us see what the text looks like.
-                        decoded_line = raw_line_bytes.decode('latin1')
-                        parts = decoded_line.strip().split('|')
-                        print(f"  Split Count (using '|'): {len(parts)} parts")
-                        # print(f"  Parts: {parts}") # Uncomment for very detailed view
-                    except Exception as e:
-                        print(f"  Could not decode or split line. Error: {e}")
-
-                    print("-" * 20)
-
-                except Exception as line_error:
-                    print(f"Error reading line {i+1}: {line_error}")
+                raw_line_bytes = f.readline()
+                if not raw_line_bytes:
+                    print("\n--- End of file reached. ---")
                     break
+
+                print(f"Line {i+1}:")
+                # 1. Show the raw bytes as Python sees them.
+                #    Look for \r\n (Windows), \n (Unix), or something else.
+                print(f"  Raw Bytes: {repr(raw_line_bytes)}")
+
+                # 2. Try to decode it as a string and see how it splits.
+                #    'latin1' is a robust encoding that never fails.
+                try:
+                    decoded_line = raw_line_bytes.decode('latin1')
+                    parts = decoded_line.strip().split('|')
+                    print(f"  Split Count (using '|'): {len(parts)} parts")
+                except Exception as e:
+                    print(f"  Could not decode or split line. Error: {e}")
+
+                print("-" * 20)
 
     except Exception as e:
         print(f"--- FATAL ERROR opening or reading file: {e} ---")
 
+
 if __name__ == "__main__":
-    try:
-        # Prompt the user for the file path
-        print("Please enter the full path to the problematic .dat file (e.g., 1099MTran):")
-        path = input("> ")
-        diagnose(path)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    finally:
-        # Keep the window open so the user can copy the text
-        input("\n--- Diagnosis complete. Press Enter to exit. ---")
+    # --- Define the filenames to check ---
+    # If your files have different names, change them here.
+    tbl_file = '1099MTbl.dat'
+    tran_file = '1099MTran.dat'
+
+    # --- Run diagnostics on both files ---
+    diagnose(tran_file)
+    print("\n" + "="*50 + "\n")
+    diagnose(tbl_file)
+
+    # Keep the window open so the user can copy the text
+    input("\n--- Diagnosis complete. Please copy all the text above and paste it in your reply. Press Enter to exit. ---")
